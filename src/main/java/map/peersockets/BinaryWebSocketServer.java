@@ -22,18 +22,23 @@ public class BinaryWebSocketServer {
 	@OnOpen
 	public void onOpen(Session session) {
 	  sessions.add(session);
+	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "New Session detected.");
 	}
 
 	@OnClose
 	public void onClose(Session session) {
 	  sessions.remove(session);
+	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Session closed.");
 	}
 	
 	@OnMessage
-	public void onMessage(ByteBuffer byteBuffer) {
+	public void onMessage(String byteBuffer) {
+	
+	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Message received.");
+		
 	  for (Session session : sessions) {
 	    try {
-	      session.getBasicRemote().sendBinary(byteBuffer);
+	      session.getBasicRemote().sendText(byteBuffer);
 	    } catch (IOException ex) {
 	      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
 	    }
