@@ -21,6 +21,7 @@ public class BinaryWebSocketServer {
 	
 	@OnOpen
 	public void onOpen(Session session) {
+
 	  sessions.add(session);
 	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "New Session detected.");
 	}
@@ -32,13 +33,31 @@ public class BinaryWebSocketServer {
 	}
 	
 	@OnMessage
-	public void onMessage(String byteBuffer) {
+	public void onMessage(String message, Session senderSession) {
 	
 	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Message received.");
 		
 	  for (Session session : sessions) {
 	    try {
-	      session.getBasicRemote().sendText(byteBuffer);
+	    	if(session.getId().compareTo(senderSession.getId()) != 0) {
+	    		session.getBasicRemote().sendText(message);
+	    	}
+	    } catch (IOException ex) {
+	      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	  }
+	}
+	
+	@OnMessage
+	public void onMessage(ByteBuffer byteBuffer, boolean last, Session senderSession) {
+	
+	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Binary received.");
+		
+	  for (Session session : sessions) {
+	    try {
+	    	if(session.getId().compareTo(senderSession.getId()) != 0) {
+	    		session.getBasicRemote().sendBinary(byteBuffer);
+	    	}
 	    } catch (IOException ex) {
 	      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
 	    }
