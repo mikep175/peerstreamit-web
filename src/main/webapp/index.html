@@ -6,7 +6,32 @@
     <body>
         <meta charset="utf-8">
         <title>HelloWorld Web sockets</title>
-        <script language="javascript" type="text/javascript">
+        
+        <section>
+  <video controls autoplay width="320" height="240"></video>
+  <pre id="log"></pre>
+</section>
+
+
+<script>
+
+
+function Logger(id) {
+  this.el = document.getElementById('log');
+}
+Logger.prototype.log = function(msg) {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(document.createTextNode(msg));
+  fragment.appendChild(document.createElement('br'));
+  this.el.appendChild(fragment);
+};
+
+Logger.prototype.clear = function() {
+  this.el.textContent = '';
+};
+
+var logger = new Logger('log');
+
             var wsUri = getRootUri() + "/sockets";
  
             function getRootUri() {
@@ -14,6 +39,23 @@
             }
  
             function init() {
+
+            	var FILE = 'test.webm';
+            	var NUM_CHUNKS = 5;
+            	var video = document.querySelector('video');
+
+            	window.MediaSource = window.MediaSource || window.WebKitMediaSource;
+            	if (!!!window.MediaSource) {
+            	  alert('MediaSource API is not available');
+            	}
+
+            	var mediaSource = new MediaSource();
+
+            	document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
+
+            	video.src = window.URL.createObjectURL(mediaSource);
+            	var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
+                
                 output = document.getElementById("output");
 
                 websocket = new WebSocket(wsUri);
@@ -23,7 +65,27 @@
                     onOpen(evt)
                 };
                 websocket.onmessage = function(evt) {
-                    onMessage(evt)
+
+					if(typeof evt.data == 'Blob') {
+						
+						var arrayBuffer;
+						var fileReader = new FileReader();
+						fileReader.onload = function() {
+						    arrayBuffer = this.result;
+						    sourceBuffer.appendBuffer(arrayBuffer);
+
+						    if (video.paused) {
+					            video.play(); // Start playing after 1st chunk is appended.
+					          }
+						    
+						};
+						
+						fileReader.readAsArrayBuffer(blob);
+
+					}
+					else {
+                    	onMessage(evt)
+					}
                 };
                 websocket.onerror = function(evt) {
                     onError(evt)
