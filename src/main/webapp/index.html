@@ -51,7 +51,7 @@ var logger = new Logger('log');
 
             	var mediaSource = new MediaSource();
 
-            	document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
+            	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
 
             	video.src = window.URL.createObjectURL(mediaSource);
             	var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
