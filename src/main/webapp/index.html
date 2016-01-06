@@ -30,12 +30,13 @@ Logger.prototype.clear = function() {
   this.el.textContent = '';
 };
 
+var sourceBuffer;
 
 function sourceOpen() {
 
 
 	video.src = window.URL.createObjectURL(mediaSource);
-	var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
+	sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
     
 
 	
