@@ -36,15 +36,21 @@ var output;
 var websocket;
 
 var queue = [];
-var first = true;
+var ready = true;
 
 function sourceOpen() {
 
 	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');//'video/webm; codecs="vorbis,vp8"');
     
 	sourceBuffer.addEventListener('updateend', function() {
-	  if ( queue.length ) {
+
+	  ready = true;
+		
+	  if ( queue.length && queue.length > 0) {
+		  
 	    sourceBuffer.appendBuffer(queue.shift());
+	    ready = false;
+	    
 	  }
 	}, false);
 	
@@ -93,19 +99,24 @@ var logger = new Logger('log');
 						fileReader.onload = function() {
 						    arrayBuffer = this.result;
 
-							if(first == true) {
-						    	first = false;
-						    	sourceBuffer.appendBuffer(arrayBuffer);
-								
+							if(ready == true) {
+
+								if ( queue.length && queue.length > 0) {
+									queue.push(arrayBuffer);
+								    sourceBuffer.appendBuffer(queue.shift());
+								    ready = false;
+								    
+								}
+								else {
+						    		sourceBuffer.appendBuffer(arrayBuffer);
+									ready = false;
+								}
 							}else {
 
 								queue.push(arrayBuffer);
 
 						    }
 
-
-
-							
 						    if (video.paused) {
 					            video.play(); // Start playing after 1st chunk is appended.
 					          }
