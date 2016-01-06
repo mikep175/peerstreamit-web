@@ -44,14 +44,16 @@ function sourceOpen() {
 	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42c01f, mp4a.40.2"');//'video/webm; codecs="vorbis,vp8"');
     
 	sourceBuffer.addEventListener('updateend', function() {
-
-	  ready = true;
 		
 	  if ( queue.length && queue.length > 0) {
 		  
 	    sourceBuffer.appendBuffer(queue.shift());
 	    ready = false;
 	    
+	  } else {
+
+		  ready = true;
+			
 	  }
 	}, false);
 	
