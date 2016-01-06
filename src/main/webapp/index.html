@@ -94,9 +94,9 @@ var logger = new Logger('log');
 						    arrayBuffer = this.result;
 
 							if(first == true) {
-						    
+						    	first = false;
 						    	sourceBuffer.appendBuffer(arrayBuffer);
-
+								
 							}else {
 
 								queue.push(arrayBuffer);
