@@ -15,11 +15,12 @@
  
             function init() {
                 output = document.getElementById("output");
+
+                websocket = new WebSocket(wsUri);
             }
  
             function send_message() {
  
-                websocket = new WebSocket(wsUri);
                 websocket.onopen = function(evt) {
                     onOpen(evt)
                 };
