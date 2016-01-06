@@ -34,6 +34,7 @@ var sourceBuffer;
 var mediaSource;
 var output;
 var websocket;
+var textID;
 
 var queue = [];
 var ready = true;
@@ -66,6 +67,9 @@ var logger = new Logger('log');
  
             function init() {
 
+
+            	output = document.getElementById("output");
+            	
             	var FILE = 'test.webm';
             	var NUM_CHUNKS = 5;
             	var video = document.querySelector('video');
@@ -82,7 +86,7 @@ var logger = new Logger('log');
 
 				video.src = window.URL.createObjectURL(mediaSource);
             	
-                output = document.getElementById("output");
+                textID = document.getElementById("textID");
 
                 websocket = new WebSocket(wsUri);
 
