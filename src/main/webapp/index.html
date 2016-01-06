@@ -17,10 +17,8 @@
                 output = document.getElementById("output");
 
                 websocket = new WebSocket(wsUri);
-            }
- 
-            function send_message() {
- 
+
+
                 websocket.onopen = function(evt) {
                     onOpen(evt)
                 };
@@ -30,12 +28,14 @@
                 websocket.onerror = function(evt) {
                     onError(evt)
                 };
+            }
  
+            function send_message() {
+                doSend(textID.value);
             }
  
             function onOpen(evt) {
                 writeToScreen("Connected to Endpoint!");
-                doSend(textID.value);
  
             }
  
