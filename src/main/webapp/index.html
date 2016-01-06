@@ -31,6 +31,9 @@ Logger.prototype.clear = function() {
 };
 
 var sourceBuffer;
+var mediaSource;
+var output;
+var websocket;
 
 function sourceOpen() {
 
@@ -61,7 +64,7 @@ var logger = new Logger('log');
             	  alert('MediaSource API is not available');
             	}
 
-            	var mediaSource = new MediaSource();
+            	mediaSource = new MediaSource();
 
             	mediaSource.addEventListener('sourceopen', sourceOpen);
             	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
