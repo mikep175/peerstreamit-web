@@ -75,7 +75,7 @@ var logger = new Logger('log');
                 };
                 websocket.onmessage = function(evt) {
 
-					if(typeof evt.data == 'Blob') {
+					if(evt.data.size) {
 						
 						var arrayBuffer;
 						var fileReader = new FileReader();
