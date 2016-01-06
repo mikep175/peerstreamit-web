@@ -35,11 +35,18 @@ var mediaSource;
 var output;
 var websocket;
 
+var queue = [];
+var first = true;
+
 function sourceOpen() {
 
 	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');//'video/webm; codecs="vorbis,vp8"');
     
-
+	sourceBuffer.addEventListener('updateend', function() {
+	  if ( queue.length ) {
+	    sourceBuffer.appendBuffer(queue.shift());
+	  }
+	}, false);
 	
 }
 
@@ -85,8 +92,20 @@ var logger = new Logger('log');
 						var fileReader = new FileReader();
 						fileReader.onload = function() {
 						    arrayBuffer = this.result;
-						    sourceBuffer.appendBuffer(arrayBuffer);
 
+							if(first == true) {
+						    
+						    	sourceBuffer.appendBuffer(arrayBuffer);
+
+							}else {
+
+								queue.push(arrayBuffer);
+
+						    }
+
+
+
+							
 						    if (video.paused) {
 					            video.play(); // Start playing after 1st chunk is appended.
 					          }
