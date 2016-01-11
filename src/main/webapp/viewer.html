@@ -346,7 +346,7 @@ var logger = new Logger('log');
 
 							var elapsed = dif / 1000;
 							
-							if(video.duration <= (video.duration - parseInt(retrieved)) * (retrieved / elapsed) ) {
+							if(video.duration <= (video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) ) {
 								$("#stream-status").text("Playing");
 								video.play();
 
