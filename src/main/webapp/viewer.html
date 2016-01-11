@@ -39,7 +39,7 @@
                     <div id="image-inner-wrap" data-bind="events: { click: toggleShowDetails }">
                         <section data-bind="attr: { class: detailsClass }" id="details" class="visible">
                             <div>
-                                <h2 data-bind="text: currentPhoto.name, visible: currentPhoto.name">Siesta</h2>
+                                <h2 id="stream-status" data-bind="text: currentPhoto.name, visible: currentPhoto.name">Initializing viewer</h2>
                                 <p data-bind="html: currentPhoto.description, visible: currentPhoto.description">.</p>
                             </div>
                         </section>
@@ -260,7 +260,10 @@ var logger = new Logger('log');
             function getRootUri() {
                 return "ws://peersockets-myappsplatform.rhcloud.com:8000";
             }
- 
+
+            var dataStart = null;
+            var needed = 10;
+            
             function init() {
 
 
@@ -317,8 +320,11 @@ var logger = new Logger('log');
 
 						    }
 
-						    if (video.paused) {
-					            video.play(); // Start playing after 1st chunk is appended.
+						    if (dataStart == null) {
+						    	$("#stream-status").text("Buffering");
+
+						    	dataStart = new Date();
+					            //video.play(); // Start playing after 1st chunk is appended.
 					          }
 						    
 						};
@@ -327,6 +333,26 @@ var logger = new Logger('log');
 
 					}
 					else {
+
+						if(evt.data && evt.data.indexOf && evt.data.indexOf('TC:') == 0) {
+
+							var retrieved = evt.data.split(':')[0];
+							
+							$("#stream-status").text("Buffering - retrieved " + retrieved + "s");
+							
+							var now = new Date();
+
+							var dif = now.getTime() - dataStart.getTime();
+
+							var elapsed = dif / 1000;
+							
+							if(video.duration <= (video.duration - parseInt(retrieved)) * (retrieved / elapsed) ) {
+
+								video.play();
+
+							}
+						}
+						
                     	onMessage(evt)
 					}
                 };
@@ -342,6 +368,7 @@ var logger = new Logger('log');
             function onOpen(evt) {
                 writeToScreen("Connected to Endpoint!");
  				doSend('play');
+ 				$("#stream-status").text("Starting stream");
             }
  
             function onMessage(evt) {
