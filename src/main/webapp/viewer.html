@@ -44,7 +44,7 @@
                             </div>
                         </section>
                         <div class="loading" data-bind="style: { width: currentPhoto.calculatedWidth }" style="width: 793.188px;">
-                            <div class="image" data-bind="style: { backgroundImage: currentPhoto.backgroundPhoto, width: currentPhoto.calculatedWidth, visibility: currentPhoto.image_url ? 'visible' : 'hidden' } " style="width: 793.188px; visibility: visible; background-image: url(&quot;https://drscdn.500px.org/photo/135575007/m%3D900_k%3D1_a%3D1/0ce42d56c329ef2dd7838738a2441f49&quot;);"></div>
+                            <video controls autoplay width="100%" height="100%"></video>
                         </div>
                     </div>
                 </div>
@@ -206,4 +206,167 @@
     
 
 <div id="_500px_container" style="display: none; width: 0px; height: 0px; border: 0px; margin: 0px; padding: 0px;"></div>
+
+<script>
+
+
+function Logger(id) {
+  this.el = document.getElementById('log');
+}
+Logger.prototype.log = function(msg) {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(document.createTextNode(msg));
+  fragment.appendChild(document.createElement('br'));
+  this.el.appendChild(fragment);
+};
+
+Logger.prototype.clear = function() {
+  this.el.textContent = '';
+};
+
+var sourceBuffer;
+var mediaSource;
+var output;
+var websocket;
+var textID;
+
+var queue = [];
+var ready = true;
+
+function sourceOpen() {
+
+	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42c01f, mp4a.40.2"');//'video/webm; codecs="vorbis,vp8"');
+    
+	sourceBuffer.addEventListener('updateend', function() {
+		
+	  if ( queue.length && queue.length > 0) {
+		  
+	    sourceBuffer.appendBuffer(queue.shift());
+	    ready = false;
+	    
+	  } else {
+
+		  ready = true;
+			
+	  }
+	}, false);
+	
+}
+
+var logger = new Logger('log');
+
+            var wsUri = getRootUri() + "/sockets";
+ 
+            function getRootUri() {
+                return "ws://peersockets-myappsplatform.rhcloud.com:8000";
+            }
+ 
+            function init() {
+
+
+            	output = document.getElementById("output");
+            	
+            	var FILE = 'test.webm';
+            	var NUM_CHUNKS = 5;
+            	var video = document.querySelector('video');
+
+            	window.MediaSource = window.MediaSource || window.WebKitMediaSource;
+            	if (!!!window.MediaSource) {
+            	  alert('MediaSource API is not available');
+            	}
+
+            	mediaSource = new MediaSource();
+
+            	mediaSource.addEventListener('sourceopen', sourceOpen);
+            	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
+
+				video.src = window.URL.createObjectURL(mediaSource);
+            	
+                textID = document.getElementById("textID");
+
+                websocket = new WebSocket(wsUri);
+
+
+                websocket.onopen = function(evt) {
+                    onOpen(evt)
+                };
+                websocket.onmessage = function(evt) {
+
+					if(evt.data.size) {
+						
+						var arrayBuffer;
+						var fileReader = new FileReader();
+						fileReader.onload = function() {
+						    arrayBuffer = this.result;
+
+							if(ready == true) {
+
+								if ( queue.length && queue.length > 0) {
+									queue.push(arrayBuffer);
+								    sourceBuffer.appendBuffer(queue.shift());
+								    ready = false;
+								    
+								}
+								else {
+						    		sourceBuffer.appendBuffer(arrayBuffer);
+									ready = false;
+								}
+							}else {
+
+								queue.push(arrayBuffer);
+
+						    }
+
+						    if (video.paused) {
+					            video.play(); // Start playing after 1st chunk is appended.
+					          }
+						    
+						};
+						
+						fileReader.readAsArrayBuffer(evt.data);
+
+					}
+					else {
+                    	onMessage(evt)
+					}
+                };
+                websocket.onerror = function(evt) {
+                    onError(evt)
+                };
+            }
+ 
+            function send_message() {
+                doSend(textID.value);
+            }
+ 
+            function onOpen(evt) {
+                writeToScreen("Connected to Endpoint!");
+ 				doSend('play');
+            }
+ 
+            function onMessage(evt) {
+                writeToScreen("Message Received: " + evt.data);
+            }
+ 
+            function onError(evt) {
+                writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+            }
+ 
+            function doSend(message) {
+                writeToScreen("Message Sent: " + message);
+                websocket.send(message);
+            }
+ 
+            function writeToScreen(message) {
+                var pre = document.createElement("p");
+                pre.style.wordWrap = "break-word";
+                pre.innerHTML = message;
+                  
+                output.appendChild(pre);
+            }
+ 
+            window.addEventListener("load", init, false);
+ 
+        </script>
+        <div id="output" style="display:none" ></div>
 </body></html>
