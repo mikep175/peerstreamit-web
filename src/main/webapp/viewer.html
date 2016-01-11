@@ -1,16 +1,12 @@
 <html class="k-webkit k-webkit47"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
-        <title>Kendo UI framework components interact with Flickr photo streams | Kendo UI AeroViewr</title>
+        <title>PeerStreamIt</title>
         <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
-        <meta content="This rich HTML5 demo shows how Kendo UI framework interacts with Flickr photo streams. The demo features some HTML5-powered controls and Kendo UI DataSource." name="description">
+        <meta content="PeerStreamIt." name="description">
 
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
         <link rel="shortcut icon" href="favicon.ico">
-        <link rel="apple-touch-icon-precomposed" href="images/touch-icon-57-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/touch-icon-114-precomposed.png">
-        <link rel="apple-touch-startup-image" href="images/splash.png">
 
         <link rel="stylesheet" href="/css/aeroviewr.css">
         <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
@@ -21,16 +17,10 @@
             <script src="//kendo.cdn.telerik.com/2015.3.1111/js/jszip.min.js"></script>
             <script src="//kendo.cdn.telerik.com/2015.3.1111/js/kendo.all.min.js"></script>
             <script src="//kendo.cdn.telerik.com/2015.3.1111/js/kendo.timezones.min.js"></script>
-
-        <script src="/js/500px.js"></script>
-        <script src="/js/aeroviewr.js"></script>
     <style type="text/css" id="ki-fve-fw"></style><style type="text/css" id="ki-fve-ft"></style></head>
     <body>
         <div id="root"><div><header>
-                <form data-bind="events: { submit: performSearch }">
-                    <label>Search: <input type="search" data-bind="value: query"></label>
-                </form>
-                <h1 class="aeroLogo"><a href="">aero<span>viewr</span></a></h1>&nbsp;
+                <h1 class="aeroLogo"><a href="">peer<span>stream</span>it</a></h1>&nbsp;
                 <!--button id="slideshow-button" data-bind="text: slideShowButtonText, click: toggleSlideShow"></button-->
             </header>
 
@@ -56,162 +46,8 @@
             </section>
 
             <footer>
-                <a data-bind="click: scrollLeft" id="scroll-left" class="scroll-arrow">‹</a>
-                <div data-role="listview" data-auto-bind="false" data-bind="{ source: photos }" data-template="photo-thumb" id="photo-thumbs" class="k-widget k-listview" role="listbox">
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="ba046df8-4f4b-4e36-a9a4-875ca5ba1543" role="option" aria-selected="false" href="#photos/135575007" class="selected"><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135575007/w%3D70_h%3D70/a5e81890b0d52f2d1fc80ab90e2267cc?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="fa9483d7-7171-461b-a5b5-aab71e9105ea" role="option" aria-selected="false" href="#photos/135551583" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135551583/w%3D70_h%3D70/02ff685dedc361318f4a40ae5907a69a?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="edad88aa-bdab-470b-899f-20a758af2f4d" role="option" aria-selected="false" href="#photos/135574785" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135574785/w%3D70_h%3D70/e490c23b8293171ac6f51ca7cd6b0574?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="17b266ca-5718-4009-bc65-197e93af000f" role="option" aria-selected="false" href="#photos/135564861" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135564861/w%3D70_h%3D70/081605fcf959bb8f6a5460af0590d433?v=7"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="8a0a9a79-3d96-42f3-8f54-36d2799b9f85" role="option" aria-selected="false" href="#photos/135561583" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135561583/w%3D70_h%3D70/f1a81c6562112f627f865abe70739c32?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="0a0bdaac-9d11-4ac6-ad1c-62776c5ad1dc" role="option" aria-selected="false" href="#photos/135561141" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135561141/w%3D70_h%3D70/d5fc79a333a9191915962f785c61ee43?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="8baa110d-7195-4ab2-92e1-6b98aae1c62e" role="option" aria-selected="false" href="#photos/135558399" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135558399/w%3D70_h%3D70/341dd3e02b380d8d82f1794bc4fc435f?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="1ed4f246-c52f-4d20-bfa2-8edc6f78a523" role="option" aria-selected="false" href="#photos/135590741" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135590741/w%3D70_h%3D70/50062409d540869931288f61b3ed87de?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="f5f1c072-d4c1-4b58-959f-d7c698658603" role="option" aria-selected="false" href="#photos/135587077" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135587077/w%3D70_h%3D70/e4ce4b9507bb45f36ab0b1c3baafaedc?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="cbc0b1ff-8af1-488f-9bc6-23effc9bc1a4" role="option" aria-selected="false" href="#photos/135583147" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135583147/w%3D70_h%3D70/b3395b10dccc50f23c67df39a9154998?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="25752611-d7ac-4ba2-bb0a-acdc5be14be9" role="option" aria-selected="false" href="#photos/135582699" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135582699/w%3D70_h%3D70/7ff5d74e4708f998bd66d94c967eaa40?v=4"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="f8e61da6-42df-4f00-8b95-b182bbc74169" role="option" aria-selected="false" href="#photos/135580337" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135580337/w%3D70_h%3D70/459c0364ed950902c64bece2040c8247?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="3b24de92-20c8-48ac-ada2-a9ce570c7a7c" role="option" aria-selected="false" href="#photos/135555431" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135555431/w%3D70_h%3D70/760eeeaec926489fef287a9444f2d474?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="0db1b019-cc3d-4e77-959a-e63b05c2a119" role="option" aria-selected="false" href="#photos/135554021" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135554021/w%3D70_h%3D70/1de552e1b55ecb738683d506eabd4b1b?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="ff713b11-ca3b-4b67-ab2f-1d1ea1406af1" role="option" aria-selected="false" href="#photos/135552411" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135552411/w%3D70_h%3D70/59f2bb7dd3af02632f313e2b2e7fdf7f?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="d1d2ad45-febe-4cea-b576-7c915ad83f45" role="option" aria-selected="false" href="#photos/135552405" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135552405/w%3D70_h%3D70/d5b7159199c96fd292326bb47aad22cb?v=4"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="c56e4f1c-ceac-48b1-9724-e039e339704b" role="option" aria-selected="false" href="#photos/135642493" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135642493/w%3D70_h%3D70/2f3087a0d70717a4ee59a410fbd5417e?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="e1e4f390-c133-4530-9660-81e67530b472" role="option" aria-selected="false" href="#photos/135617983" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135617983/w%3D70_h%3D70/b8ed989545696bb920b37bec3a1b22dd?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="2e8b5d1e-1306-4cd6-8fce-94256ca44654" role="option" aria-selected="false" href="#photos/135608845" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135608845/w%3D70_h%3D70/55d255e44bbe3d1f0d41349aa2f05d31?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="e5b7d8fb-785c-4305-b1dc-7e0a3ea7b54f" role="option" aria-selected="false" href="#photos/135597237" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135597237/w%3D70_h%3D70/4524ab8e849e179c8c025abd68c97548?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="9a30cef0-46af-46f8-b4e9-d98ea1c68f61" role="option" aria-selected="false" href="#photos/135584885" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135584885/w%3D70_h%3D70/a9ebe935f3026a4f35d6063b8551d85e?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="bad76080-3fd1-46e0-8aea-32fed98d0448" role="option" aria-selected="false" href="#photos/135582263" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135582263/w%3D70_h%3D70/cf28fc2ab935e8965cfa4abf95f7ef0c?v=6"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="63fcbdfe-ab40-4e7d-a3e0-066c5ac7da8b" role="option" aria-selected="false" href="#photos/135578675" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135578675/w%3D70_h%3D70/49391f9c8a8696fc5a19f7be54eac3ac?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="21ce1cfb-26f3-4249-a832-d0442802a491" role="option" aria-selected="false" href="#photos/135572529" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135572529/w%3D70_h%3D70/e09141b1f0ed84003f3a7f8e1f8273d4?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="da68bd14-4d3d-457c-80a8-8352c25a3147" role="option" aria-selected="false" href="#photos/135551389" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135551389/w%3D70_h%3D70/f1ccdf0de088e832315b1dffab29009d?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="6b201c9e-8c56-4dfc-8698-223740fe1810" role="option" aria-selected="false" href="#photos/135610707" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135610707/w%3D70_h%3D70/ddcd471b8e843e72bbf0d39020d30f1a?v=7"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="d78c0dd2-5184-4dbc-9234-67d82dd619f8" role="option" aria-selected="false" href="#photos/135590765" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135590765/w%3D70_h%3D70/0943727414388830c3aa5cc0105bd393?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="014dbdf1-1495-4eb8-8722-99129a61dcfa" role="option" aria-selected="false" href="#photos/135571987" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135571987/w%3D70_h%3D70/84e0e9fe57656f95e260fa7d800f9a3b?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="047133c2-dc6f-4b81-a3f0-67452c11c88a" role="option" aria-selected="false" href="#photos/135569229" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135569229/w%3D70_h%3D70/69b45f0fa18469acc03a4b11d4030e5c?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="75511d4f-5e1a-42b4-816b-8066e54d415a" role="option" aria-selected="false" href="#photos/135566741" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135566741/w%3D70_h%3D70/1e175ef913ce7c0c1f615cd02f722f65?v=8"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="cf3ddaa1-7c1b-4e2c-8bb4-2f9c3826e95e" role="option" aria-selected="false" href="#photos/135564283" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135564283/w%3D70_h%3D70/d3fed257ab02dc105ee600259a40e3c8?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="f4c251f9-b000-41dc-bf40-ae4149329d6e" role="option" aria-selected="false" href="#photos/135562141" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135562141/w%3D70_h%3D70/012f9499ec14bd8c88428b1fba5fcf33?v=7"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="d201ea78-24e4-4ff0-a9d1-ef689eb2719a" role="option" aria-selected="false" href="#photos/135559683" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135559683/w%3D70_h%3D70/78955aa74d510955088f809c4aa871de?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="b482fb87-210b-4f41-b837-ca486df896de" role="option" aria-selected="false" href="#photos/135555159" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135555159/w%3D70_h%3D70/31cd1295c9021888720bdadbd885f64f?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="58766c3b-e82c-4422-a032-cda6ad4e82c4" role="option" aria-selected="false" href="#photos/135635767" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135635767/w%3D70_h%3D70/72e15009eea5ac6880e7eaee97050849?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="92cdaf91-c850-4562-bd18-e748d2661ec9" role="option" aria-selected="false" href="#photos/135599987" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135599987/w%3D70_h%3D70/cc682e4aee2ffc6cbb5cb869500e4017?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="046ba1ca-11c5-48fd-8149-d8ef8abf2e92" role="option" aria-selected="false" href="#photos/135598843" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135598843/w%3D70_h%3D70/7e31d7ac34928ea0c4a1d788b9e54506?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="103a5e2b-9f55-4bd9-9a5c-7fbbee95668a" role="option" aria-selected="false" href="#photos/135589803" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135589803/w%3D70_h%3D70/048e657b47b81967dafb0637c65afdac?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="07a758e6-178e-42f1-89b0-e2d889d33fe2" role="option" aria-selected="false" href="#photos/135588075" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135588075/w%3D70_h%3D70/c297d94270e2d5bd18945ecfcb6c5966?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="147a007e-f5b6-4387-9f16-0f784fc60992" role="option" aria-selected="false" href="#photos/135580785" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135580785/w%3D70_h%3D70/aef5b2fdef02202a77e03cbcc4cf8c37?v=2"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="8b375821-2777-4ef4-b690-63762bcf1c85" role="option" aria-selected="false" href="#photos/135571163" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135571163/w%3D70_h%3D70/ef9918e283c6188c95bcc855de6d1c06?v=8"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="da953beb-cc68-4804-9624-057386bf3edc" role="option" aria-selected="false" href="#photos/135567771" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135567771/w%3D70_h%3D70/d47c474428b840d04f83bf7ef1f076ea?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="254579d2-bf04-4727-963a-21f79d1891d9" role="option" aria-selected="false" href="#photos/135563317" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135563317/w%3D70_h%3D70/38e2ab617fb5f885809abc3b1bb60f84?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="984414f4-37ac-44a8-a620-1dd707594e00" role="option" aria-selected="false" href="#photos/135562679" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135562679/w%3D70_h%3D70/3f22ade0ce2047d4581c94b2b9bacfb6?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="13274a15-a2b5-4f2c-83c7-1f76ab153b66" role="option" aria-selected="false" href="#photos/135642617" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135642617/w%3D70_h%3D70/c941163a5e0922c7209042542db3c01b?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="8a573be0-d026-450a-b6e4-f9fd2f9767ab" role="option" aria-selected="false" href="#photos/135632151" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135632151/w%3D70_h%3D70/d6b0907b1b894e4f0e807ae76dbc5204?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="540adb3d-8172-446a-b61c-e3a1f3e556d1" role="option" aria-selected="false" href="#photos/135629897" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135629897/w%3D70_h%3D70/640b7ba91a36987834e5a6704c2443e5?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="c21bd9b6-90b6-4bc0-a2fe-40fa9163cca2" role="option" aria-selected="false" href="#photos/135581427" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135581427/w%3D70_h%3D70/a23073e3cc21ea7a5391e619fa21e1b3?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="9ed5454b-0066-47c0-8732-f8802c20c7e9" role="option" aria-selected="false" href="#photos/135577263" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135577263/w%3D70_h%3D70/be310a3191d07f8994caec1e7e4a8e09?v=3"></a>
-        
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }" data-uid="d3846492-f60e-4d7d-9952-ccc262e3de4a" role="option" aria-selected="false" href="#photos/135570127" class=""><img data-bind="attr: { src: image_url }" src="https://drscdn.500px.org/photo/135570127/w%3D70_h%3D70/ef6e25fc96e9ac07ae6565ad000d9a41?v=3"></a>
-        </div>
-                <a data-bind="click: scrollRight" id="scroll-right" class="scroll-arrow">›</a>
+                <span style="display: inline-block; width: 100%; text-align: center" >Copyright © 2015 · Real Time Productions, LLC. All Rights Reserved</span>
             </footer></div></div>
-
-        <script type="text/x-kendo-template" id="main">
-            <header>
-                <form data-bind="events: { submit: performSearch }">
-                    <label>Search: <input type="search" data-bind="value: query" /></label>
-                </form>
-                <h1 class="aeroLogo"><a href="">aero<span>viewr</span></a></h1>&nbsp;
-                <!--button id="slideshow-button" data-bind="text: slideShowButtonText, click: toggleSlideShow"></button-->
-            </header>
-
-            <section data-bind="events: { click: toggleFocus }" id="image-container">
-                <div id="image-wrap">
-                    <div id="image-inner-wrap" data-bind="events: { click: toggleShowDetails }">
-                        <section data-bind="attr: { class: detailsClass }" id="details">
-                            <div>
-                                <h2 data-bind="text: currentPhoto.name, visible: currentPhoto.name"></h2>
-                                <p data-bind="html: currentPhoto.description, visible: currentPhoto.description"></p>
-                                <ul>
-                                    <li data-bind="visible: currentPhoto.camera"><span>Camera</span><div data-bind="text: currentPhoto.camera"></div></li>
-                                    <li data-bind="visible: currentPhoto.focal_length"><span>Focal Length</span><div data-bind="text: currentPhoto.focal_length"></div></li>
-                                    <li data-bind="visible: currentPhoto.shutter_speed"><span>Shutter Speed</span><div data-bind="text: currentPhoto.shutter_speed"></div></li>
-                                    <li data-bind="visible: currentPhoto.aperture"><span>Aperture</span><div data-bind="text: currentPhoto.aperture"></div></li>
-                                    <li data-bind="visible: currentPhoto.iso"><span>ISO</span><div data-bind="text: currentPhoto.iso"></div></li>
-                                    <li data-bind="visible: currentPhoto.times_viewed"><span>Times Viewed</span><div data-bind="text: currentPhoto.times_viewed"></div></li>
-                                    <li data-bind="visible: currentPhoto.rating"><span>Rating</span><div data-bind="text: currentPhoto.rating + '%'"></div></li>
-                                    <li data-bind="visible: currentPhoto.categoryName"><span>Category</span><div data-bind="text: currentPhoto.categoryName"></div></li>
-                                    <li data-bind="visible: currentPhoto.user.fullname"><span>Copyright</span><div data-bind="text: currentPhoto.user.fullname"></div></li>
-                                    <li data-bind="invisible: currentPhoto.noAvatar"><span>Avatar</span><div><img data-bind="attr: { src: currentPhoto.user.userpic_url }"/></div></li>
-                                </ul>
-                            </div>
-                        </section>
-                        <div class="loading" data-bind="style: { width: currentPhoto.calculatedWidth }">
-                            <div class="image" data-bind="style: { backgroundImage: currentPhoto.backgroundPhoto, width: currentPhoto.calculatedWidth, visibility: currentPhoto.image_url ? 'visible' : 'hidden' } "></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <footer>
-                <a data-bind="click: scrollLeft" id="scroll-left" class="scroll-arrow">&#x2039;</a>
-                <div data-role="listview" data-auto-bind="false" data-bind="{ source: photos }" data-template="photo-thumb" id="photo-thumbs"></div>
-                <a data-bind="click: scrollRight" id="scroll-right" class="scroll-arrow">&#x203A;</a>
-            </footer>
-        </script>
-
-        <script type="text/x-kendo-template" id="photo-thumb">
-            <a data-bind="attr: { href: thumbHref, class: thumbClass }"><img data-bind="attr: { src: image_url }"></a>
-        </script>
-    
-
-<div id="_500px_container" style="display: none; width: 0px; height: 0px; border: 0px; margin: 0px; padding: 0px;"></div>
-
 <script>
 
 
