@@ -40,7 +40,12 @@
                         <section data-bind="attr: { class: detailsClass }" id="details" class="visible">
                             <div>
                                 <h2 id="stream-status" data-bind="text: currentPhoto.name, visible: currentPhoto.name">Initializing viewer</h2>
-                                <p data-bind="html: currentPhoto.description, visible: currentPhoto.description">.</p>
+                                <ul>
+                                	<li ><span>Buffered:</span><div id="stream-buff" ></div></li>
+                                	<li ><span>Elapsed:</span><div id="stream-elap" ></div></li>
+                                    <li ><span>Video Duration:</span><div id="stream-vd" ></div></li>
+                                    <li ><span>Playable Duration:</span><div id="stream-pd" ></div></li>
+                               </ul>
                             </div>
                         </section>
                         <div class="loading" data-bind="style: { width: currentPhoto.calculatedWidth }" style="width: 793.188px;">
@@ -338,13 +343,17 @@ var logger = new Logger('log');
 
 							var retrieved = evt.data.split(':')[1];
 							
-							$("#stream-status").text("Buffering - retrieved " + retrieved + "s");
+							$("#stream-buff").text(retrieved + "s");
 							
 							var now = new Date();
 
 							var dif = now.getTime() - dataStart.getTime();
 
 							var elapsed = dif / 1000;
+
+							$("#stream-elap").text(elapsed + "s");
+							$("#stream-vd").text(video.duration + "s");
+							$("#stream-pd").text((video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) + "s");
 							
 							if(video.duration <= (video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) ) {
 								$("#stream-status").text("Playing");
