@@ -44,7 +44,7 @@
                             </div>
                         </section>
                         <div class="loading" data-bind="style: { width: currentPhoto.calculatedWidth }" style="width: 793.188px;">
-                            <video controls autoplay width="100%" height="100%"></video>
+                            <video controls width="100%" height="100%" ></video>
                         </div>
                     </div>
                 </div>
@@ -336,7 +336,7 @@ var logger = new Logger('log');
 
 						if(evt.data && evt.data.indexOf && evt.data.indexOf('TC:') == 0) {
 
-							var retrieved = evt.data.split(':')[0];
+							var retrieved = evt.data.split(':')[1];
 							
 							$("#stream-status").text("Buffering - retrieved " + retrieved + "s");
 							
@@ -347,7 +347,7 @@ var logger = new Logger('log');
 							var elapsed = dif / 1000;
 							
 							if(video.duration <= (video.duration - parseInt(retrieved)) * (retrieved / elapsed) ) {
-
+								$("#stream-status").text("Playing");
 								video.play();
 
 							}
