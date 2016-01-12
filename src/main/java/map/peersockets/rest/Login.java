@@ -50,7 +50,7 @@ public class Login {
 		
 		try {
 			
-			if(pes.authenticate(req.getPassword(), (byte[])doc.get("password"), (byte[])doc.get("salt")) == true) {
+			if(pes.authenticate(req.getPassword(), ((org.bson.types.Binary)doc.get("password")).getData(), ((org.bson.types.Binary)doc.get("salt")).getData()) == true) {
 				
 				return true;
 				
