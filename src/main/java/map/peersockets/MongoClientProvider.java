@@ -29,7 +29,7 @@ public class MongoClientProvider {
 	public void init() {
 		
 		MongoCredential credential = MongoCredential.createCredential(System.getenv("OPENSHIFT_MONGODB_DB_USERNAME"),
-				System.getenv("peersockets"),
+				"peersockets",
 				System.getenv("OPENSHIFT_MONGODB_DB_PASSWORD").toCharArray());
 		
 		mongoClient = new MongoClient(new ServerAddress(
