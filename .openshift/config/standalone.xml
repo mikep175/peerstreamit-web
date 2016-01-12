@@ -180,14 +180,6 @@
                         <flush-strategy>IdleConnections</flush-strategy>
                     </pool>
                 </datasource>
-                <datasource jndi-name="java:/mongoDS" pool-name="mongoDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/</connection-url>
-                    <driver>mongoDriver</driver>
-                    <security>
-                        <user-name>admin</user-name>
-                        <password>V77DdvZlQARl</password>
-                    </security>
-                </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
@@ -197,9 +189,6 @@
                     </driver>
                     <driver name="postgresql" module="org.postgresql.jdbc">
                         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
-                    </driver>
-                    <driver name="mongoDriver" module="com.mongodb">
-                        <xa-datasource-class>com.mongodb.jdbc.Driver</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
