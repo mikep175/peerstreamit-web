@@ -12,12 +12,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import map.peersockets.MongoClientProvider;
 import map.peersockets.PasswordEncryptionService;
@@ -42,8 +44,38 @@ public class Login {
 		
 		MongoCollection<Document> collection = db.getCollection("users");
 
+		Document doc = collection.find(Filters.eq("userId", req.getUsername())).first();
+		
+		PasswordEncryptionService pes = new PasswordEncryptionService();
+		
+		try {
+			
+			if(pes.authenticate(req.getPassword(), (byte[])doc.get("password"), (byte[])doc.get("salt")) == true) {
+				
+				return true;
+				
+			}
+			
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+		
+		
+    }
+	
+	public boolean createUser(NewUserRequest req) {
+		
+		MongoClient mClient = mongoClientProvider.getMongoClient();
+		
+		MongoDatabase db = mClient.getDatabase("peersockets");
+		
+		MongoCollection<Document> collection = db.getCollection("users");
+
 		// insert a document
-		Document document = new Document("userId", "map");
+		Document document = new Document("userId", req.getUsername());
 		
 		PasswordEncryptionService pes = new PasswordEncryptionService();
 		
@@ -51,7 +83,7 @@ public class Login {
 			
 			byte[] salt = pes.generateSalt();
 			
-			document.put("password", pes.getEncryptedPassword("wordpass", salt));
+			document.put("password", pes.getEncryptedPassword(req.getPassword(), salt));
 			document.put("salt", salt);
 			
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -63,7 +95,6 @@ public class Login {
 		
 		return true;
 		
-		
-    }
+	}
 
 }
