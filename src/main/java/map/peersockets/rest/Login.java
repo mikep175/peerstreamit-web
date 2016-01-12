@@ -1,5 +1,8 @@
 package map.peersockets.rest;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
@@ -17,6 +20,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import map.peersockets.MongoClientProvider;
+import map.peersockets.PasswordEncryptionService;
 
 @RequestScoped
 @Path("/login")
@@ -41,9 +45,21 @@ public class Login {
 		MongoCollection<Document> collection = db.getCollection("users");
 
 		// insert a document
-		Document document = new Document("userId", 1);
+		Document document = new Document("userId", "map");
 		
-		document.put("mp", "mp");
+		PasswordEncryptionService pes = new PasswordEncryptionService();
+		
+		try {
+			
+			byte[] salt = pes.generateSalt();
+			
+			document.put("password", pes.getEncryptedPassword("wordpass", salt));
+			document.put("salt", salt);
+			
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		collection.insertOne(document);
 		
