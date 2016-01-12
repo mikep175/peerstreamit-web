@@ -40,8 +40,6 @@ public class Login {
 		
 		MongoDatabase db = mClient.getDatabase("peersockets");
 		
-		db.createCollection("users");
-		
 		MongoCollection<Document> collection = db.getCollection("users");
 
 		// insert a document
