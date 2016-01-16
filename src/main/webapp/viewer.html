@@ -65,6 +65,13 @@ Logger.prototype.clear = function() {
   this.el.textContent = '';
 };
 
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 var sourceBuffer;
 var mediaSource;
 var output;
@@ -212,7 +219,7 @@ var logger = new Logger('log');
  
             function onOpen(evt) {
                 writeToScreen("Connected to Endpoint!");
- 				doSend('play');
+ 				doSend('PSICLIKEY:' + getParameterByName('psi'));
  				$("#stream-status").text("Starting stream");
             }
  
