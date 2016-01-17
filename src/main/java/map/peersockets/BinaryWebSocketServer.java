@@ -164,7 +164,7 @@ public class BinaryWebSocketServer {
 			    			}
 			    			
 			    		}
-			    		
+			    		 
 			    		session.getBasicRemote().sendText("PSIAUTH:" + nsi + ":" + pw);
 			    	}
 			    } catch (IOException ex) {
