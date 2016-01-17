@@ -89,7 +89,7 @@ public class BinaryWebSocketServer {
 	  }
 	  
 	  //check psikey for availability
-	  if(message.indexOf("PSICLIKEY:") == 0) {
+	  else if(message.indexOf("PSICLIKEY:") == 0) {
 		  
 		  String psiKey = message.substring(10);
 		  
@@ -120,7 +120,7 @@ public class BinaryWebSocketServer {
 	  }
 	  
 	  //psikey requires pw
-	  if(message.indexOf("PSICHALLENGE:") == 0) {
+	  else if(message.indexOf("PSICHALLENGE:") == 0) {
 		  
 		  String nsi = message.substring(13);
 		  String sid = streamingRequests.get(nsi);
@@ -142,7 +142,7 @@ public class BinaryWebSocketServer {
 	  }
 	  
 	  //psikey pw attempt
-	  if(message.indexOf("PSIAUTH:") == 0) {
+	  else if(message.indexOf("PSIAUTH:") == 0) {
 		  
 		  String pw = message.substring(9);
 		  String sid = challengeRequests.get(senderSession.getId());
@@ -175,7 +175,7 @@ public class BinaryWebSocketServer {
 	  }
 	  
 	  //psikey pw no good
-	  if(message.indexOf("PSIAUTHREJECTED:") == 0) {
+	  else if(message.indexOf("PSIAUTHREJECTED:") == 0) {
 		  
 		  String nsi = message.substring(16);
 		  
@@ -196,7 +196,7 @@ public class BinaryWebSocketServer {
 	  }
 	  
 	  //new socket set to handle streaming
-	  if(message.indexOf("PSISTREAM:") == 0) {
+	  else if(message.indexOf("PSISTREAM:") == 0) {
 		  
 		  String nsi = message.substring(10);
 		  
@@ -204,6 +204,22 @@ public class BinaryWebSocketServer {
 		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
 	  }
 	  
+	  else if(streamingSessions.containsKey(senderSession.getId()) == true) {
+		  
+		  String destSessionId = streamingSessions.get(senderSession.getId());
+		  
+		  for (Session session : sessions) {
+		    try {
+		    	if(session.getId().compareTo(destSessionId) == 0) {
+		    		session.getBasicRemote().sendText(message);
+		    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "String sent.");
+		    	}
+		    } catch (IOException ex) {
+		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+		  }
+		  
+	  }
 	}
 	
 	@OnMessage
