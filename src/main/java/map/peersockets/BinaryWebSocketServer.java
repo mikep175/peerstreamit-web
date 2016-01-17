@@ -25,20 +25,20 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/sockets")
 public class BinaryWebSocketServer {
     
-	private static final HashMap<String, String> challengeRequests =
-			(HashMap<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
+	private static final Map<String, String> challengeRequests =
+			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
 	
-	private static final HashMap<String, String> streamingRequests =
-			(HashMap<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
+	private static final Map<String, String> streamingRequests =
+			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
 	
-	private static final HashMap<String, String> streamingSessions =
-			(HashMap<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
+	private static final Map<String, String> streamingSessions =
+			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
 	
-	private static final HashMap<String, List<String>> listeningKeys =
-	(HashMap<String, List<String>>)Collections.synchronizedMap(new HashMap<String, List<String>>());
+	private static final Map<String, List<String>> listeningKeys =
+	(Map<String, List<String>>)Collections.synchronizedMap(new HashMap<String, List<String>>());
 	
-	private static final Set<Session> sessions =
-			(Set<Session>)Collections.synchronizedSet(new HashSet<Session>());
+	private static final (Set<Session> sessions =
+			((SSet<Session>)Collections.synchronizedSet(new HashSet<Session>());
 	
 	private String nextSessionId() {
 		
