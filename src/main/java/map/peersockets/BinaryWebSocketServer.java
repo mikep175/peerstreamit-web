@@ -37,8 +37,8 @@ public class BinaryWebSocketServer {
 	private static final Map<String, List<String>> listeningKeys =
 	(Map<String, List<String>>)Collections.synchronizedMap(new HashMap<String, List<String>>());
 	
-	private static final (Set<Session> sessions =
-			((SSet<Session>)Collections.synchronizedSet(new HashSet<Session>());
+	private static final Set<Session> sessions =
+			(Set<Session>)Collections.synchronizedSet(new HashSet<Session>());
 	
 	private String nextSessionId() {
 		
