@@ -71,7 +71,7 @@ public class BinaryWebSocketServer {
 	@OnMessage 
 	public void onMessage(String message, Session senderSession) {
 	
-	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Message received.");
+	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Message received: " + message);
 		
 	  
 	  //notify ps of psikey
@@ -84,7 +84,7 @@ public class BinaryWebSocketServer {
 		  }
 		  
 		  listeningKeys.get(senderSession.getId()).add(message.substring(11));
-		  
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key Listening: " + senderSession.getId() + " - " + message.substring(11));
 		  return;
 	  }
 	  
@@ -106,6 +106,7 @@ public class BinaryWebSocketServer {
 					    		streamingRequests.put(nsi, senderSession.getId());
 					    		
 					    		session.getBasicRemote().sendText(message + ":" + nsi);
+					    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key found: " + message + " - " + nsi);
 					    	}
 					    } catch (IOException ex) {
 					      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,6 +201,7 @@ public class BinaryWebSocketServer {
 		  String nsi = message.substring(10);
 		  
 		  streamingSessions.put(senderSession.getId(), streamingRequests.remove(nsi));
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
 	  }
 	  
 	}
