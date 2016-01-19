@@ -116,10 +116,10 @@ function sourceOpen() {
 		
 		(function(si) { setTimeout(function() {
 
-			if(si == lastSeekId) {
+			if(lastSeekId > 0 && si == lastSeekId) {
 
 				lastSeekId = 0;
-				websocket.send("PSISEEK:" + videoCurrentTime);
+				websocket.send("PSISEEK:" + video.currentTime);
 			}
 			
 		}, 200) })(lastSeekId);
