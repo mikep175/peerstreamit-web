@@ -249,7 +249,7 @@ public class BinaryWebSocketServer {
 		  
 		  sendSessionMessage(message, destSessionId);
 		  
-	  } else if(streamingSessions.values().contains(senderSession.getId()) == true) {
+	  } else {
 		  
 		  String destSessionId = null;
 		  
@@ -265,6 +265,9 @@ public class BinaryWebSocketServer {
 		  if(destSessionId != null) {
 		
 			  sendSessionMessage(message, destSessionId);
+		  }
+		  else {
+			  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "String sent.");
 		  }
 	  }
 	}
