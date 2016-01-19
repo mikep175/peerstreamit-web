@@ -266,9 +266,6 @@ public class BinaryWebSocketServer {
 		
 			  sendSessionMessage(message, destSessionId);
 		  }
-		  else {
-			  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "String sent.");
-		  }
 	  }
 	}
 
