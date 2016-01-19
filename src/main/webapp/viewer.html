@@ -72,6 +72,7 @@ function getParameterByName(name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+var video;
 var sourceBuffer;
 var mediaSource;
 var output;
@@ -98,7 +99,19 @@ function sourceOpen() {
 			
 	  }
 	}, false);
+
+	var videoCurrentTime = 0;
 	
+	video.addEventListener("timeupdate", function(event){
+		
+      videoCurrentTime = this.currentTime;
+      
+    });
+	
+	video.addEventListener('seeked', function(e) { 
+		
+		websocket.send("PSISEEK:" + videoCurrentTime);
+	});
 }
 
 var logger = new Logger('log');
@@ -119,7 +132,7 @@ var logger = new Logger('log');
             	
             	var FILE = 'test.webm';
             	var NUM_CHUNKS = 5;
-            	var video = document.querySelector('video');
+                video = document.querySelector('video');
 
             	window.MediaSource = window.MediaSource || window.WebKitMediaSource;
             	if (!!!window.MediaSource) {
