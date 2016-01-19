@@ -56,14 +56,32 @@ public class BinaryWebSocketServer {
 	}
 
 	@OnClose
-	public void onClose(Session session) {
+	public void onClose(Session senderSession) {
 		
-		sessions.remove(session);
+		 if(streamingSessions.containsKey(senderSession.getId()) == true) {
+			 
+			  String destSessionId = streamingSessions.remove(senderSession.getId());
+			  
+			  for (Session session : sessions) {
+			    try {
+			    	if(session.getId().compareTo(destSessionId) == 0) {
+			    		session.getBasicRemote().sendText("PSIKILL");
+			    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "String sent.");
+			    	}
+			    } catch (IOException ex) {
+			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+			    }
+			  }
+		 }
 		
-		if(listeningKeys.containsKey(session.getId()) == true) {
+		sessions.remove(senderSession);
+		
+		if(listeningKeys.containsKey(senderSession.getId()) == true) {
 			
-			listeningKeys.remove(session.getId());
+			listeningKeys.remove(senderSession.getId());
 		}
+		
+		
 		
 	    Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Session closed.");
 	}
