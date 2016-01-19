@@ -73,6 +73,27 @@ public class BinaryWebSocketServer {
 			    }
 			  }
 		 }
+		 
+		 else if(streamingSessions.values().contains(senderSession.getId()) == true) {
+			  
+
+			  String destSessionId = null;
+			  
+			  for(String ss : streamingSessions.keySet()) {
+				  
+				  if(streamingSessions.get(ss).compareTo(senderSession.getId()) == 0) {
+					  
+					  destSessionId = ss;
+					  break;
+				  }
+			  }
+			  
+			  if(destSessionId != null) {
+				  
+				  streamingSessions.remove(destSessionId);
+				  sendSessionMessage("PSIKILL", destSessionId);
+			  }
+		  }
 		
 		sessions.remove(senderSession);
 		
@@ -226,7 +247,30 @@ public class BinaryWebSocketServer {
 		  
 		  String destSessionId = streamingSessions.get(senderSession.getId());
 		  
-		  for (Session session : sessions) {
+		  sendSessionMessage(message, destSessionId);
+		  
+	  } else if(streamingSessions.values().contains(senderSession.getId()) == true) {
+		  
+		  String destSessionId = null;
+		  
+		  for(String ss : streamingSessions.keySet()) {
+			  
+			  if(streamingSessions.get(ss).compareTo(senderSession.getId()) == 0) {
+				  
+				  destSessionId = ss;
+				  break;
+			  }
+		  }
+		  
+		  if(destSessionId != null) {
+		
+			  sendSessionMessage(message, destSessionId);
+		  }
+	  }
+	}
+
+	private void sendSessionMessage(String message, String destSessionId) {
+		for (Session session : sessions) {
 		    try {
 		    	if(session.getId().compareTo(destSessionId) == 0) {
 		    		session.getBasicRemote().sendText(message);
@@ -236,8 +280,6 @@ public class BinaryWebSocketServer {
 		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
 		    }
 		  }
-		  
-	  }
 	}
 	
 	@OnMessage
