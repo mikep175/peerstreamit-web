@@ -107,10 +107,23 @@ function sourceOpen() {
       videoCurrentTime = this.currentTime;
       
     });
+    
+	var lastSeekId = 0;
 	
 	video.addEventListener('seeking', function(e) { 
+
+		lastSeekId++;
 		
-		websocket.send("PSISEEK:" + videoCurrentTime);
+		(function(si) { setTimeout(function() {
+
+			if(si == lastSeekId) {
+
+				lastSeekId = 0;
+				websocket.send("PSISEEK:" + videoCurrentTime);
+			}
+			
+		}, 200) })(lastSeekId);
+		
 	});
 }
 
