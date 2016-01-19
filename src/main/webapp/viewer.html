@@ -108,7 +108,7 @@ function sourceOpen() {
       
     });
 	
-	video.addEventListener('seeked', function(e) { 
+	video.addEventListener('seeking', function(e) { 
 		
 		websocket.send("PSISEEK:" + videoCurrentTime);
 	});
