@@ -242,14 +242,6 @@ public class BinaryWebSocketServer {
 		  streamingSessions.put(senderSession.getId(), streamingRequests.remove(nsi));
 		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
 	  }
-	  
-	  else if(streamingSessions.containsKey(senderSession.getId()) == true) {
-		  
-		  String destSessionId = streamingSessions.get(senderSession.getId());
-		  
-		  sendSessionMessage(message, destSessionId);
-		  
-	  }	  
 	  else if(message.indexOf("PSIWAIT:") == 0) {
 		  
 		  String nsi = message.substring(8);
@@ -270,6 +262,13 @@ public class BinaryWebSocketServer {
 		  
 		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
 	  }
+	  else if(streamingSessions.containsKey(senderSession.getId()) == true) {
+		  
+		  String destSessionId = streamingSessions.get(senderSession.getId());
+		  
+		  sendSessionMessage(message, destSessionId);
+		  
+	  }	  
 	  else {
 		  
 		  String destSessionId = null;
