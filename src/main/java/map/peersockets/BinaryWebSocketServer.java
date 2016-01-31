@@ -112,7 +112,7 @@ public class BinaryWebSocketServer {
 	
 	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Message received: " + message);
 		
-	  
+	   
 	  //notify ps of psikey
 	  if(message.indexOf("PSISERVKEY:") == 0) {
 		  
