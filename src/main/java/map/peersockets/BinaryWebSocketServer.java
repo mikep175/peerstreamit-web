@@ -249,7 +249,28 @@ public class BinaryWebSocketServer {
 		  
 		  sendSessionMessage(message, destSessionId);
 		  
-	  } else {
+	  }	  
+	  else if(message.indexOf("PSIWAIT:") == 0) {
+		  
+		  String nsi = message.substring(8);
+		  
+		  String destId = streamingSessions.remove(senderSession.getId());
+		  
+		  streamingSessions.put("NSI_WAIT:" + nsi, destId);
+		  
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
+	  }
+	  else if(message.indexOf("PSIRECONN:") == 0) {
+		  
+		  String nsi = message.substring(10);
+		  
+		  String destId = streamingSessions.remove("NSI_WAIT:" + nsi);
+		  
+		  streamingSessions.put(senderSession.getId(), destId);
+		  
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
+	  }
+	  else {
 		  
 		  String destSessionId = null;
 		  
