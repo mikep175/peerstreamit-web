@@ -245,7 +245,7 @@ public class BinaryWebSocketServer {
 	  else if(message.indexOf("PSIWAIT:") == 0) {
 		  
 		  String nsi = message.substring(8);
-		  
+		   
 		  String destId = streamingSessions.remove(senderSession.getId());
 		  
 		  streamingSessions.put("NSI_WAIT:" + nsi, destId);
