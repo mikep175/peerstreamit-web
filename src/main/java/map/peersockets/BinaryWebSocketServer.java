@@ -102,7 +102,7 @@ public class BinaryWebSocketServer {
 			listeningKeys.remove(senderSession.getId());
 		}
 		
-		
+		 
 		
 	    Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Session closed.");
 	}
