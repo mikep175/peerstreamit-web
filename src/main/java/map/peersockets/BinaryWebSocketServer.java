@@ -269,7 +269,7 @@ public class BinaryWebSocketServer {
 		  sendSessionMessage(message, destSessionId);
 		  
 	  }	  
-	  else {
+	  else if(streamingSessions.values().contains(senderSession.getId()) == true) {
 		  
 		  String destSessionId = null;
 		  
