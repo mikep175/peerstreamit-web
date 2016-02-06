@@ -309,15 +309,19 @@ public class BinaryWebSocketServer {
 	  
 	  String destSessionId = streamingSessions.get(senderSession.getId());
 	  
-	  for (Session session : sessions) {
-	    try {
-	    	if(session.getId().compareTo(destSessionId) == 0) {
-	    		session.getBasicRemote().sendBinary(byteBuffer);
-	    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Binary sent.");
-	    	}
-	    } catch (IOException ex) {
-	      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
-	    }
+	  if(destSessionId != null) {
+		  
+		  for (Session session : sessions) {
+		    try {
+		    	if(session.getId().compareTo(destSessionId) == 0) {
+		    		session.getBasicRemote().sendBinary(byteBuffer);
+		    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Binary sent.");
+		    	}
+		    } catch (IOException ex) {
+		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+		  }
+		  
 	  }
 	}
 }
