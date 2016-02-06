@@ -240,7 +240,7 @@ public class BinaryWebSocketServer {
 		  String nsi = message.substring(10);
 		  
 		  streamingSessions.put(senderSession.getId(), streamingRequests.remove(nsi));
-		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAM : " + senderSession.getId() + " - " + nsi);
 	  }
 	  else if(message.indexOf("PSIWAIT:") == 0) {
 		  
@@ -250,7 +250,7 @@ public class BinaryWebSocketServer {
 		  
 		  streamingSessions.put("NSI_WAIT:" + nsi, destId);
 		  
-		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSIWAIT : " + senderSession.getId() + " - " + nsi);
 	  }
 	  else if(message.indexOf("PSIRECONN:") == 0) {
 		  
@@ -260,7 +260,7 @@ public class BinaryWebSocketServer {
 		  
 		  streamingSessions.put(senderSession.getId(), destId);
 		  
-		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Streaming : " + senderSession.getId() + " - " + nsi);
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSIRECONN : " + senderSession.getId() + " - " + nsi);
 	  }
 	  else if(streamingSessions.containsKey(senderSession.getId()) == true) {
 		  
@@ -294,7 +294,7 @@ public class BinaryWebSocketServer {
 		    try {
 		    	if(session.getId().compareTo(destSessionId) == 0) {
 		    		session.getBasicRemote().sendText(message);
-		    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "String sent.");
+		    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "String sent:" + message);
 		    	}
 		    } catch (IOException ex) {
 		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
