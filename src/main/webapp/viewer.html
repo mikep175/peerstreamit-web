@@ -89,9 +89,19 @@ function sourceOpen() {
 	sourceBuffer.addEventListener('updateend', function() {
 		
 	  if ( queue.length && queue.length > 0) {
+
+		if(video.error != null) {
+
+			console.log(video.error);
+			ready = false;
+		}
+		else {
+
+		    sourceBuffer.appendBuffer(queue.shift());
+		    ready = false;
+		}
+			
 		  
-	    sourceBuffer.appendBuffer(queue.shift());
-	    ready = false;
 	    
 	  } else {
 
