@@ -239,7 +239,7 @@ public class BinaryWebSocketServer {
 		  
 		  String nsi = message.substring(10);
 		  
-		  streamingSessions.put(senderSession.getId(), streamingRequests.remove(nsi));
+		  streamingSessions.put(senderSession.getId(), streamingRequests.get(nsi));
 		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAM : " + senderSession.getId() + " - " + nsi);
 	  }
 	  else if(message.indexOf("PSIWAIT:") == 0) {
