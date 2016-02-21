@@ -10,6 +10,7 @@
         <link rel="shortcut icon" href="favicon.ico">
 
         <link href="//kendo.cdn.telerik.com/2016.1.112/styles/kendo.common.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2016.1.112/styles/kendo.black.min.css" />
         <link rel="stylesheet" href="/css/style.css">
         <link href="//fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
   		<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -41,7 +42,7 @@
 var promptWin = null;
 
 $(document).ready(function() {
-	promptWin = $("#pwPrompt").kendoWindow({});
+	promptWin = $("#pwPrompt").kendoWindow({actions: {}, modal: true, resizable: false, title: 'Content is password protected', width: 300, height: 180 }).data('kendoWindow');
 
 	$("#submitPw").click(function() {
 
