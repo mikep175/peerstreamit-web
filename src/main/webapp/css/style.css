@@ -1,0 +1,125 @@
+* {
+    font-family: "Droid Sans", sans-serif;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body, html, #root, #root > div {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    height: 100%;
+    width: 100%;
+}
+
+header, footer
+{
+    transition: transform 100ms;
+    -moz-transition: -moz-transform 100ms;
+    -webkit-transition: -webkit-transform 100ms;
+}
+
+.focused header
+{
+    transform: translatey(-100px);
+    -moz-transform: translatey(-100px);
+    -webkit-transform: translatey(-100px);
+}
+
+.focused footer
+{
+    transform: translatey(100px);
+    -moz-transform: translatey(100px);
+    -webkit-transform: translatey(100px);
+}
+
+header {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,.2);
+    box-shadow: 0 0 20px #000;
+    -moz-box-shadow: 0 0 20px #000;
+    -webkit-box-shadow: 0 0 20px #000;
+    background: url("../images/texture-darker.png");
+    padding: 20px;
+    color: white;
+}
+
+header label {
+    float: right;
+    font-size: 1.2em;
+}
+
+ 
+#image-container {
+    height: 100%;
+    width: 100%;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer; 
+}
+
+#image-container #image-wrap {
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    padding-top: 76px;
+    padding-bottom: 20px;
+    height: 100%;
+}
+
+
+footer {
+    position: fixed;
+    z-index: 100;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid rgba(255,255,255,.2);
+    box-shadow: 0 0 20px #000;
+    -moz-box-shadow: 0 0 20px #000;
+    -webkit-box-shadow: 0 0 20px #000;
+}
+
+
+.logo,
+.logo a,
+#details.visible
+{
+    font-weight: normal;
+    margin: 0;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.logo,
+.logo a
+{
+    font-weight: normal;
+    font-size: 30px;
+    color: #ffd200;
+}
+
+.logo span
+{
+    font-weight: bold;
+}
+
+/* Small screen fallback */
+
+@media only screen and (max-device-width: 1024px) {
+
+    html,
+    body
+    {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-transform: translatez(0);
+    }
+ 
+
+}
+
