@@ -10,35 +10,18 @@
 
         <link rel="stylesheet" href="/css/aeroviewr.css">
         <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
-
-			<link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.common-material.min.css" rel="stylesheet"><link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.rtl.min.css" rel="stylesheet"><link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.material.min.css" rel="stylesheet"><link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.material.mobile.min.css" rel="stylesheet">
-           <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
-            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
-            <script src="//kendo.cdn.telerik.com/2015.3.1111/js/jszip.min.js"></script>
-            <script src="//kendo.cdn.telerik.com/2015.3.1111/js/kendo.all.min.js"></script>
-            <script src="//kendo.cdn.telerik.com/2015.3.1111/js/kendo.timezones.min.js"></script>
+  		<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
     <style type="text/css" id="ki-fve-fw"></style><style type="text/css" id="ki-fve-ft"></style></head>
     <body>
         <div id="root"><div><header>
                 <h1 class="aeroLogo"><a href="">peer<span>stream</span>it</a></h1>&nbsp;
-                <!--button id="slideshow-button" data-bind="text: slideShowButtonText, click: toggleSlideShow"></button-->
             </header>
 
             <section data-bind="events: { click: toggleFocus }" id="image-container">
                 <div id="image-wrap">
-                    <div id="image-inner-wrap" data-bind="events: { click: toggleShowDetails }">
-                        <section data-bind="attr: { class: detailsClass }" id="details" class="visible">
-                            <div>
-                                <h2 id="stream-status" data-bind="text: currentPhoto.name, visible: currentPhoto.name">Initializing viewer</h2>
-                                <ul>
-                                	<li ><span>Buffered:</span><div id="stream-buff" ></div></li>
-                                	<li ><span>Elapsed:</span><div id="stream-elap" ></div></li>
-                                    <li ><span>Video Duration:</span><div id="stream-vd" ></div></li>
-                                    <li ><span>Playable Duration:</span><div id="stream-pd" ></div></li>
-                               </ul>
-                            </div>
-                        </section>
-                        <div class="loading" data-bind="style: { width: currentPhoto.calculatedWidth }" style="width: 793.188px;">
+                    <div id="image-inner-wrap" data-bind="events: { click: toggleShowDetails }" >
+                        <div class="loading" >
                             <video controls width="100%" height="100%" ></video>
                         </div>
                     </div>
@@ -51,18 +34,12 @@
 <script>
 
 
-function Logger(id) {
-  this.el = document.getElementById('log');
+function Logger() {
+  
 }
-Logger.prototype.log = function(msg) {
-  var fragment = document.createDocumentFragment();
-  fragment.appendChild(document.createTextNode(msg));
-  fragment.appendChild(document.createElement('br'));
-  this.el.appendChild(fragment);
-};
 
-Logger.prototype.clear = function() {
-  this.el.textContent = '';
+Logger.prototype.log = function(msg) {
+  console.log(msg);
 };
 
 function getParameterByName(name) {
@@ -137,7 +114,7 @@ function sourceOpen() {
 	});
 }
 
-var logger = new Logger('log');
+			var logger = new Logger();
 
             var wsUri = getRootUri() + "/sockets";
  
@@ -169,7 +146,7 @@ var logger = new Logger('log');
 
 				video.src = window.URL.createObjectURL(mediaSource);
             	
-                textID = document.getElementById("textID");
+               // textID = document.getElementById("textID");
 
                 websocket = new WebSocket(wsUri);
 
@@ -205,7 +182,7 @@ var logger = new Logger('log');
 						    }
 
 						    if (dataStart == null) {
-						    	$("#stream-status").text("Buffering");
+						    	//$("#stream-status").text("Buffering");
 
 						    	dataStart = new Date();
 					            //video.play(); // Start playing after 1st chunk is appended.
@@ -222,7 +199,7 @@ var logger = new Logger('log');
 
 							var retrieved = evt.data.split(':')[1];
 							
-							$("#stream-buff").text(retrieved + "s");
+							//$("#stream-buff").text(retrieved + "s");
 							
 							var now = new Date();
 
@@ -230,14 +207,19 @@ var logger = new Logger('log');
 
 							var elapsed = dif / 1000;
 
-							$("#stream-elap").text(elapsed + "s");
-							$("#stream-vd").text(video.duration + "s");
-							$("#stream-pd").text((video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) + "s");
+							//$("#stream-elap").text(elapsed + "s");
+							//$("#stream-vd").text(video.duration + "s");
+							//$("#stream-pd").text((video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) + "s");
 							
 							if(video.duration <= (video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) ) {
-								$("#stream-status").text("Playing");
+								//$("#stream-status").text("Playing");
 								video.play();
 
+								setInterval(function() {
+
+									websocket.send("PSITIME:" + video.currentTime);
+
+									 }, 3000);
 							}
 						}
 						
@@ -250,7 +232,7 @@ var logger = new Logger('log');
             }
  
             function send_message() {
-                doSend(textID.value);
+                //doSend(textID.value);
             }
  
             function onOpen(evt) {
@@ -273,11 +255,7 @@ var logger = new Logger('log');
             }
  
             function writeToScreen(message) {
-                var pre = document.createElement("p");
-                pre.style.wordWrap = "break-word";
-                pre.innerHTML = message;
-                  
-                output.appendChild(pre);
+
             }
  
             window.addEventListener("load", init, false);
