@@ -1,4 +1,5 @@
-<html class="k-webkit k-webkit47"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+<html>
+	<head> 
         <title>PeerStreamIt</title>
         <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
         <meta content="PeerStreamIt." name="description">
@@ -8,11 +9,13 @@
 
         <link rel="shortcut icon" href="favicon.ico">
 
+        <link href="//kendo.cdn.telerik.com/2016.1.112/styles/kendo.common.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="/css/style.css">
-        <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
   		<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
-    <style type="text/css" id="ki-fve-fw"></style><style type="text/css" id="ki-fve-ft"></style></head>
+        <script src="//kendo.cdn.telerik.com/2016.1.112/js/kendo.ui.core.min.js"></script>
+    </head>
     <body>
         <div id="root"><div><header>
                 <h1 class="logo"><a href="">peer<span>stream</span>it</a></h1>&nbsp;
@@ -27,7 +30,28 @@
             <footer>
                 <span style="display: inline-block; width: 100%; text-align: center; color: white;" >Copyright © 2016 · Real Time Productions, LLC. All Rights Reserved</span>
             </footer></div></div>
+            <div style="display:none" >
+            	<div id="pwPrompt" >
+            		<input type="password" id="txtPw" class="k-textbox" placeholder="Enter password..." />
+            		<input type="submit" id="submitPw" />
+            	</div>
+            </div>
 <script>
+
+var promptWin = null;
+
+$(document).ready(function() {
+	promptWin = $("#pwPrompt").kendoWindow({});
+
+	$("#submitPw").click(function() {
+
+		doSend("PSIAUTH:" + $("#txtPw").val());
+
+		promptWin.close();
+        return false;
+				});
+});
+
 
 
 function Logger() {
@@ -123,8 +147,8 @@ function sourceOpen() {
             
             function init() {
 
-
-            	output = document.getElementById("output");
+				
+            	//output = document.getElementById("output");
             	
             	var FILE = 'test.webm';
             	var NUM_CHUNKS = 5;
@@ -132,7 +156,7 @@ function sourceOpen() {
 
             	window.MediaSource = window.MediaSource || window.WebKitMediaSource;
             	if (!!!window.MediaSource) {
-            	  alert('MediaSource API is not available');
+            	  window.location = 'http://caniuse.com/#feat=mediasource';
             	}
 
             	mediaSource = new MediaSource();
@@ -189,9 +213,15 @@ function sourceOpen() {
 						fileReader.readAsArrayBuffer(evt.data);
 
 					}
-					else {
+					else if(evt.data && evt.data.indexOf) {
 
-						if(evt.data && evt.data.indexOf && evt.data.indexOf('TC:') == 0) {
+					if(evt.data.indexOf('PSICHALLENGE') == 0 || evt.data.indexOf('PSIAUTHREJECTED') == 0) {
+
+						promptWin.center();
+						promptWin.open();
+
+					}
+					else if(evt.data.indexOf('TC:') == 0) {
 
 							var retrieved = evt.data.split(':')[1];
 							
@@ -234,7 +264,7 @@ function sourceOpen() {
             function onOpen(evt) {
                 writeToScreen("Connected to Endpoint!");
  				doSend('PSICLIKEY:' + getParameterByName('psi'));
- 				$("#stream-status").text("Starting stream");
+ 				//$("#stream-status").text("Starting stream");
             }
  
             function onMessage(evt) {
@@ -257,5 +287,4 @@ function sourceOpen() {
             window.addEventListener("load", init, false);
  
         </script>
-        <div id="output" style="display:none" ></div>
 </body></html>
