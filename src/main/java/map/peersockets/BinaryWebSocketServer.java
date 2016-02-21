@@ -183,7 +183,7 @@ public class BinaryWebSocketServer {
 	  //psikey pw attempt
 	  else if(message.indexOf("PSIAUTH:") == 0) {
 		  
-		  String pw = message.substring(9);
+		  String pw = message.substring(8);
 		  String sid = challengeRequests.get(senderSession.getId());
 		  
 		  for (Session session : sessions) {
@@ -195,7 +195,7 @@ public class BinaryWebSocketServer {
 			    		
 			    		for(Entry<String, String> sr : streamingRequests.entrySet()) {
 			    			
-			    			if(sr.getValue().compareTo(sid) == 0) {
+			    			if(sr.getValue().compareTo(senderSession.getId()) == 0) {
 			    				
 			    				nsi = sr.getKey();
 			    				
