@@ -19,10 +19,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/sockets")
+@ServerEndpoint(value = "/sockets", configurator=ServletAwareConfig.class)
 public class BinaryWebSocketServer {
     
 	private static final Map<String, String> challengeRequests =
@@ -47,11 +48,12 @@ public class BinaryWebSocketServer {
 	    return new BigInteger(130, random).toString(32);
 	}
 	
+	EndpointConfig config;
+	
 	@OnOpen
-	public void onOpen(Session session) {
+	public void onOpen(Session session, EndpointConfig config) {
 		
-		sessions.add(session);
-	    
+		this.config = config;
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "New Session detected.");
 	}
 
@@ -132,6 +134,8 @@ public class BinaryWebSocketServer {
 		  
 		  String psiKey = message.substring(10);
 		  
+		  boolean found = false;
+		  
 		  for(Map.Entry<String, List<String>> lk : listeningKeys.entrySet()) {
 			  
 			  if(lk.getValue().contains(psiKey) == true) {
@@ -144,8 +148,24 @@ public class BinaryWebSocketServer {
 					    		
 					    		streamingRequests.put(nsi, senderSession.getId());
 					    		
-					    		session.getBasicRemote().sendText(message + ":" + nsi);
+					    		String origin = "";
+					    		
+					    		if(config.getUserProperties().containsKey("origin") == true) {
+					    			
+					    			origin = (String) config.getUserProperties().get("origin");
+					    		}
+					    		
+				    			String userAgent = "";
+					    		
+					    		if(config.getUserProperties().containsKey("user-agent") == true) {
+					    			
+					    			origin = (String) config.getUserProperties().get("user-agent");
+					    		}
+					    		
+					    		session.getBasicRemote().sendText(message + ":" + nsi + ":" + origin + ":" + userAgent);
 					    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key found: " + message + " - " + nsi);
+					    		
+					    		found = true;
 					    	}
 					    } catch (IOException ex) {
 					      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -154,6 +174,15 @@ public class BinaryWebSocketServer {
 				  
 			  }
 			  
+		  }
+		  
+		  if(found == false) {
+			  try { 
+				  senderSession.getBasicRemote().sendText("NOT");
+				  
+			  } catch (IOException ex) {
+			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+			  }
 		  }
 		  
 	  }

@@ -24,7 +24,13 @@
 
             <section id="image-container">
                 <div id="image-wrap">
-                            <video controls width="100%" height="100%" ></video>
+                            <video style="display:none" controls width="100%" height="100%" ></video>
+                            <div id="loading" >
+                            	<h2>Loading...</h2>
+                            </div>
+                            <div id="message"  style="display:none" >
+                            	<h2>Content is not currently available.  Please contact the content owner to see if they are streaming.</h2>
+                            </div>
                 </div>
             </section>
 
@@ -84,6 +90,8 @@ function sourceOpen() {
 
 	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42c01f, mp4a.40.2"');//'video/webm; codecs="vorbis,vp8"');
 
+	$("#loading").hide();
+	$("video").show();
 
 	setInterval(function() {
 
@@ -223,34 +231,39 @@ function sourceOpen() {
 					}
 					else if(evt.data && evt.data.indexOf) {
 
-					if(evt.data.indexOf('PSICHALLENGE') == 0 || evt.data.indexOf('PSIAUTHREJECTED') == 0) {
+						if(evt.data.indexOf('NOT') == 0) {
 
-						promptWin.center();
-						promptWin.open();
-
-					}
-					else if(evt.data.indexOf('TC:') == 0) {
-
-							var retrieved = evt.data.split(':')[1];
-							
-							//$("#stream-buff").text(retrieved + "s");
-							
-							var now = new Date();
-
-							var dif = now.getTime() - dataStart.getTime();
-
-							var elapsed = dif / 1000;
-
-							//$("#stream-elap").text(elapsed + "s");
-							//$("#stream-vd").text(video.duration + "s");
-							//$("#stream-pd").text((video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) + "s");
-							
-							if(video.duration <= (video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) ) {
-								//$("#stream-status").text("Playing");
-								video.play();
-
-							}
+							$("#message").show();
+							$("#loading").hide();
 						}
+						else if(evt.data.indexOf('PSICHALLENGE') == 0 || evt.data.indexOf('PSIAUTHREJECTED') == 0) {
+
+							promptWin.center();
+							promptWin.open();
+
+						}
+						else if(evt.data.indexOf('TC:') == 0) {
+	
+								var retrieved = evt.data.split(':')[1];
+								
+								//$("#stream-buff").text(retrieved + "s");
+								
+								var now = new Date();
+	
+								var dif = now.getTime() - dataStart.getTime();
+	
+								var elapsed = dif / 1000;
+	
+								//$("#stream-elap").text(elapsed + "s");
+								//$("#stream-vd").text(video.duration + "s");
+								//$("#stream-pd").text((video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) + "s");
+								
+								if(video.duration <= (video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) ) {
+									//$("#stream-status").text("Playing");
+									video.play();
+	
+								}
+							}
 						
                     	onMessage(evt)
 					}
