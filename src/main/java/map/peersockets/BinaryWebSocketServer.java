@@ -168,7 +168,7 @@ public class BinaryWebSocketServer {
 					    		found = true;
 					    	}
 					    } catch (IOException ex) {
-					      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+					      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
 					    }
 				  }
 				  
@@ -181,7 +181,7 @@ public class BinaryWebSocketServer {
 				  senderSession.getBasicRemote().sendText("NOT");
 				  
 			  } catch (IOException ex) {
-			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE,  ex.getMessage(), ex);
 			  }
 		  }
 		  
