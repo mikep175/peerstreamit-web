@@ -1,5 +1,8 @@
 package map.peersockets;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpSession;
 import javax.websocket.HandshakeResponse;
 import javax.websocket.server.HandshakeRequest;
@@ -9,6 +12,8 @@ public class ServletAwareConfig extends ServerEndpointConfig.Configurator {
 
     @Override
     public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
+    	
+    	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + request.getHeaders().toString());
     	
     	if (request.getHeaders().containsKey("user-agent")) {
     		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); // lower-case!
