@@ -90,14 +90,6 @@ function sourceOpen() {
 
 	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42c01f, mp4a.40.2"');//'video/webm; codecs="vorbis,vp8"');
 
-	$("#loading").hide();
-	$("video").show();
-
-	setInterval(function() {
-
-		websocket.send("PSITIME:" + video.currentTime);
-
-	}, 3000);
     
 	sourceBuffer.addEventListener('updateend', function() {
 		
@@ -186,6 +178,7 @@ function sourceOpen() {
 
                 websocket = new WebSocket(wsUri);
 
+                var first = true;
 
                 websocket.onopen = function(evt) {
                     onOpen(evt)
@@ -193,6 +186,20 @@ function sourceOpen() {
                 websocket.onmessage = function(evt) {
 
 					if(evt.data.size) {
+
+						if(first == true) {
+
+							$("#loading").hide();
+							$("video").show();
+
+							setInterval(function() {
+
+								websocket.send("PSITIME:" + video.currentTime);
+
+							}, 3000);
+
+							first = false;
+						}
 						
 						var arrayBuffer;
 						var fileReader = new FileReader();
