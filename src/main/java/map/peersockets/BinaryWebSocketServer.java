@@ -158,17 +158,24 @@ public class BinaryWebSocketServer {
 					    		
 					    		String origin = " ";
 					    		
-					    		if(senderSession.getUserProperties().containsKey("origin") == true) {
-					    			
-					    			origin = (String) senderSession.getUserProperties().get("origin");
-					    		}
-					    		
 				    			String userAgent = " ";
 					    		
-					    		if(senderSession.getUserProperties().containsKey("user-agent") == true) {
-					    			
-					    			origin = (String) senderSession.getUserProperties().get("user-agent");
-					    		}
+					    		 for (Session sup : sessions) {
+					 			    	if(sup.getId().compareTo(senderSession.getId()) == 0) {
+					 			    		
+					 			    		
+								    		if(sup.getUserProperties().containsKey("origin") == true) {
+								    			
+								    			origin = (String) sup.getUserProperties().get("origin");
+								    		}
+								    		
+								    		if(sup.getUserProperties().containsKey("user-agent") == true) {
+								    			
+								    			origin = (String) sup.getUserProperties().get("user-agent");
+								    		}
+					 			   
+					 			    	}
+					    		 }
 					    		
 					    		session.getBasicRemote().sendText(message + ":" + nsi + ":" + origin + ":" + userAgent);
 					    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key found: " + message + " - " + nsi);
