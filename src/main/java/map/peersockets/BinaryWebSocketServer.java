@@ -48,12 +48,20 @@ public class BinaryWebSocketServer {
 	    return new BigInteger(130, random).toString(32);
 	}
 	
-	EndpointConfig config;
-	
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
 		
-		this.config = config;
+		if(config.getUserProperties().containsKey("origin") == true) {
+			
+			session.getUserProperties().put("origin", config.getUserProperties().get("origin"));
+		}
+		
+		if(config.getUserProperties().containsKey("user-agent") == true) {
+			
+			session.getUserProperties().put("user-agent", config.getUserProperties().get("user-agent"));
+		}
+		
+		sessions.add(session);
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "New Session detected.");
 	}
 
@@ -150,16 +158,16 @@ public class BinaryWebSocketServer {
 					    		
 					    		String origin = "";
 					    		
-					    		if(config.getUserProperties().containsKey("origin") == true) {
+					    		if(senderSession.getUserProperties().containsKey("origin") == true) {
 					    			
-					    			origin = (String) config.getUserProperties().get("origin");
+					    			origin = (String) senderSession.getUserProperties().get("origin");
 					    		}
 					    		
 				    			String userAgent = "";
 					    		
-					    		if(config.getUserProperties().containsKey("user-agent") == true) {
+					    		if(senderSession.getUserProperties().containsKey("user-agent") == true) {
 					    			
-					    			origin = (String) config.getUserProperties().get("user-agent");
+					    			origin = (String) senderSession.getUserProperties().get("user-agent");
 					    		}
 					    		
 					    		session.getBasicRemote().sendText(message + ":" + nsi + ":" + origin + ":" + userAgent);
