@@ -13,8 +13,8 @@ public class ServletAwareConfig extends ServerEndpointConfig.Configurator {
     	if (request.getHeaders().containsKey("user-agent")) {
     		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); // lower-case!
         }
-    	if (request.getHeaders().containsKey("x-forwarded-for")) {
-    		config.getUserProperties().put("origin", request.getHeaders().get("x-forwarded-for").get(0)); // lower-case!
+    	if (request.getHeaders().containsKey("x-client-ip")) {
+    		config.getUserProperties().put("origin", request.getHeaders().get("x-client-ip").get(0)); // lower-case!
         }
     	
     }

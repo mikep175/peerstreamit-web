@@ -156,14 +156,14 @@ public class BinaryWebSocketServer {
 					    		
 					    		streamingRequests.put(nsi, senderSession.getId());
 					    		
-					    		String origin = "";
+					    		String origin = " ";
 					    		
 					    		if(senderSession.getUserProperties().containsKey("origin") == true) {
 					    			
 					    			origin = (String) senderSession.getUserProperties().get("origin");
 					    		}
 					    		
-				    			String userAgent = "";
+				    			String userAgent = " ";
 					    		
 					    		if(senderSession.getUserProperties().containsKey("user-agent") == true) {
 					    			
