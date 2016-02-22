@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+h2 {
+    color: white;
+}
+
 body, html, #root, #root > div {
     margin: 0;
     padding: 0;
