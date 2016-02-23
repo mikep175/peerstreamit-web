@@ -14,7 +14,7 @@ public class ServletAwareConfig extends ServerEndpointConfig.Configurator {
     public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
  
     	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + request.getHeaders().toString());
-    	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + response.getHeaders().toString());
+    	//Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + response.getHeaders().toString());
     	if (request.getHeaders().containsKey("user-agent")) {
     		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); // lower-case!
         }
