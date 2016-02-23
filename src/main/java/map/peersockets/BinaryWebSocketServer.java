@@ -69,7 +69,7 @@ public class BinaryWebSocketServer {
 	public void onClose(Session senderSession) {
 		
 		 if(streamingSessions.containsKey(senderSession.getId()) == true) {
-			  
+			   
 			  String destSessionId = streamingSessions.remove(senderSession.getId());
 			  
 			  for (Session session : sessions) {
