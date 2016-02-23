@@ -1,5 +1,6 @@
 package map.peersockets;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,16 +13,18 @@ public class ServletAwareConfig extends ServerEndpointConfig.Configurator {
 
     @Override
     public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
- 
-    	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + request.getHeaders().toString());
-    	//Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + response.getHeaders().toString());
-    	if (request.getHeaders().containsKey("user-agent")) {
-    		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); // lower-case!
-        }
-    	if (request.getHeaders().containsKey("x-client-ip")) {
-    		config.getUserProperties().put("origin", request.getHeaders().get("x-client-ip").get(0)); // lower-case!
-        }
-    	
-    }
+    	try{
+	    	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + request.getHeaders().toString());
+	    	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + response.getHeaders().toString());
+	    	if (request.getHeaders().containsKey("user-agent")) {
+	    		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); // lower-case!
+	        }
+	    	if (request.getHeaders().containsKey("x-client-ip")) {
+	    		config.getUserProperties().put("origin", request.getHeaders().get("x-client-ip").get(0)); // lower-case!
+	        }
+	    } catch (Exception ex) {
+		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+		    }
+	    }
 
 }
