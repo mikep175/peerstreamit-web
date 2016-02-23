@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/sockets", configurator=ServletAwareConfig.class)
+@ServerEndpoint(value = "/sockets")//, configurator=ServletAwareConfig.class)
 public class BinaryWebSocketServer {
     
 	private static final Map<String, String> challengeRequests =
