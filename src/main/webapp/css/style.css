@@ -88,6 +88,14 @@ footer {
     -webkit-box-shadow: 0 0 20px #000;
 }
 
+.logo {
+	
+	background-image: url('/images/logo.svg');
+	background-repeat: no-repeat;
+    background-position: 70px center;
+    padding-right: 100px;
+}
+
 
 .logo,
 .logo a,
