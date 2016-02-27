@@ -17,10 +17,10 @@ public class ServletAwareConfig extends ServerEndpointConfig.Configurator {
 	    	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + request.getHeaders().toString());
 	    	Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Headers:" + response.getHeaders().toString());
 	    	if (request.getHeaders().containsKey("user-agent")) {
-	    		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); // lower-case!
+	    		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); 
 	        }
 	    	if (request.getHeaders().containsKey("x-client-ip")) {
-	    		config.getUserProperties().put("origin", request.getHeaders().get("x-client-ip").get(0)); // lower-case!
+	    		config.getUserProperties().put("origin", request.getHeaders().get("x-client-ip").get(0)); 
 	        }
 	    } catch (Exception ex) {
 		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
