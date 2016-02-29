@@ -8,7 +8,6 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
         <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
-<!-- 		<link rel="shortcut icon" type="image/png" href="http://eg.com/favicon.png"/> -->
  
         <link href="//kendo.cdn.telerik.com/2016.1.112/styles/kendo.common.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.1.112/styles/kendo.black.min.css" />
@@ -20,11 +19,12 @@
     </head>
     <body>
         <div id="root"><div><header>
-                <h1 class="logo"><a href="">peer<span>stream</span>it</a></h1>&nbsp;
+                <h1 class="logo"><a href="https://peerstreamit.com">peer<span>stream</span>it</a></h1>&nbsp;
             </header>
 
             <section id="image-container">
                 <div id="image-wrap">
+                			<img id="imageViewer" style="display:none; width: 100%; height: 100%" src="" />
                             <video style="display:none" controls width="100%" height="100%" ></video>
                             <div id="loading" >
                             	<h2>Loading...</h2>
@@ -83,6 +83,8 @@ var mediaSource;
 var output;
 var websocket;
 var textID;
+
+var imageMode = false;
 
 var queue = [];
 var ready = true;
@@ -205,25 +207,32 @@ function sourceOpen() {
 						var arrayBuffer;
 						var fileReader = new FileReader();
 						fileReader.onload = function() {
+							
 						    arrayBuffer = this.result;
-
-							if(ready == true) {
-
-								if ( queue.length && queue.length > 0) {
-									queue.push(arrayBuffer);
-								    sourceBuffer.appendBuffer(queue.shift());
-								    ready = false;
-								    
-								}
-								else {
-						    		sourceBuffer.appendBuffer(arrayBuffer);
-									ready = false;
-								}
-							}else {
+						    
+							if(imageMode == true) {
 
 								queue.push(arrayBuffer);
 
-						    }
+							} else {
+								if(ready == true) {
+	
+									if ( queue.length && queue.length > 0) {
+										queue.push(arrayBuffer);
+									    sourceBuffer.appendBuffer(queue.shift());
+									    ready = false;
+									    
+									}
+									else {
+							    		sourceBuffer.appendBuffer(arrayBuffer);
+										ready = false;
+									}
+								}else {
+	
+									queue.push(arrayBuffer);
+	
+							    }
+							}
 
 						    if (dataStart == null) {
 						    	//$("#stream-status").text("Buffering");
@@ -242,6 +251,26 @@ function sourceOpen() {
 						if(evt.data.indexOf('NOT') == 0) {
 
 							$("#message").show();
+							$("#loading").hide();
+						}
+						else if(evt.data.indexOf('PSIPIC') == 0) {
+
+							imageMode = true;
+						}
+						else if(evt.data.indexOf('PSIPICEND') == 0) {
+
+							var img = $("#imageViewer");
+
+							var finalBuffer = queue[0];
+							
+							for(var i = 1; i < queue.length; i++) {
+
+								finalBuffer = appendBuffers(finalBuffer, queue[i]);
+							}
+							
+							img.attr('src', 'data:image/png;base64,' + arrayBufferToBase64(finalBuffer));
+
+							img.show();
 							$("#loading").hide();
 						}
 						else if(evt.data.indexOf('PSICHALLENGE') == 0 || evt.data.indexOf('PSIAUTHREJECTED') == 0) {
@@ -309,7 +338,23 @@ function sourceOpen() {
             }
  
             window.addEventListener("load", init, false);
- 
+
+            function appendBuffers(buffer1, buffer2) {
+			      var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+			      tmp.set(new Uint8Array(buffer1), 0);
+			      tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
+			      return tmp.buffer;
+			    }
+
+			    function arrayBufferToBase64( buffer ) {
+			        var binary = '';
+			        var bytes = new Uint8Array( buffer );
+			        var len = bytes.byteLength;
+			        for (var i = 0; i < len; i++) {
+			            binary += String.fromCharCode( bytes[ i ] );
+			        }
+			        return window.btoa( binary );
+			    }
         </script>
         <script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
