@@ -190,18 +190,20 @@ function sourceOpen() {
 
 					if(evt.data.size) {
 
-						if(first == true) {
-
-							$("#loading").hide();
-							$("video").show();
-
-							setInterval(function() {
-
-								websocket.send("PSITIME:" + video.currentTime);
-
-							}, 3000);
-
-							first = false;
+						if(imageMode == false) {
+							if(first == true) {
+	
+								$("#loading").hide();
+								$("video").show();
+	
+								setInterval(function() {
+	
+									websocket.send("PSITIME:" + video.currentTime);
+	
+								}, 3000);
+	
+								first = false;
+							}
 						}
 						
 						var arrayBuffer;
