@@ -83,6 +83,7 @@ var mediaSource;
 var output;
 var websocket;
 var textID;
+var supportsVideo = true;
 
 var imageMode = false;
 
@@ -167,7 +168,7 @@ function sourceOpen() {
 
             	window.MediaSource = window.MediaSource || window.WebKitMediaSource;
             	if (!!!window.MediaSource) {
-            	  window.location = 'http://caniuse.com/#feat=mediasource';
+            	  supportsVideo = false;
             	}
 
             	mediaSource = new MediaSource();
@@ -191,6 +192,12 @@ function sourceOpen() {
 					if(evt.data.size) {
 
 						if(imageMode == false) {
+
+							if(supportsVideo == false) {
+
+								window.location = 'http://caniuse.com/#feat=mediasource';
+								return;
+							}
 							if(first == true) {
 	
 								$("#loading").hide();
@@ -255,10 +262,6 @@ function sourceOpen() {
 							$("#message").show();
 							$("#loading").hide();
 						}
-						else if(evt.data.indexOf('PSIPIC') == 0) {
-
-							imageMode = true;
-						}
 						else if(evt.data.indexOf('PSIPICEND') == 0) {
 
 							var img = $("#imageViewer");
@@ -274,6 +277,10 @@ function sourceOpen() {
 
 							img.show();
 							$("#loading").hide();
+						}
+						else if(evt.data.indexOf('PSIPIC') == 0) {
+
+							imageMode = true;
 						}
 						else if(evt.data.indexOf('PSICHALLENGE') == 0 || evt.data.indexOf('PSIAUTHREJECTED') == 0) {
 
