@@ -49,7 +49,7 @@
 var promptWin = null;
 
 $(document).ready(function() {
-	promptWin = $("#pwPrompt").kendoWindow({actions: {}, modal: true, resizable: false, title: 'Content is password protected', width: 300, height: 60 }).data('kendoWindow');
+	promptWin = $("#pwPrompt").kendoWindow({actions: {}, modal: true, resizable: false, title: 'Content is password protected', width: 370, height: 60 }).data('kendoWindow');
 
 	$("#submitPw").click(function() {
 
@@ -308,6 +308,7 @@ function sourceOpen() {
 
 							promptWin.center();
 							promptWin.open();
+							$('#txtPw').focus();
 
 						}
 						else if(evt.data.indexOf('TC:') == 0) {
