@@ -41,7 +41,7 @@
             <div style="display:none" >
             	<div id="pwPrompt" >
             		<input type="password" id="txtPw" class="k-textbox" placeholder="Enter password..." />
-            		<input type="submit" id="submitPw" />
+            		<input type="submit" id="submitPw" value="Peer Stream It" />
             	</div>
             </div>
 <script>
@@ -58,6 +58,13 @@ $(document).ready(function() {
 		promptWin.close();
         return false;
 				});
+
+	$('#txtPw').keyup(function(e){
+	    if(e.keyCode == 13)
+	    {
+	    	$("#submitPw").click();
+	    }
+	});
 });
 
 
@@ -257,7 +264,22 @@ function sourceOpen() {
 					}
 					else if(evt.data && evt.data.indexOf) {
 
-						if(evt.data.indexOf('NOT') == 0) {
+						if(evt.data.indexOf('PSIKILL') == 0 {
+
+							$("#message h2").text("This stream is no longer available.");
+
+							$("#message").show();
+							$("#loading").hide();
+							$("#imageViewer").hide();
+							$("video").hide();
+						}
+						else if(evt.data.indexOf('PSIMAX') == 0) {
+
+							$("#message h2").text("This stream has reached the maximum number of viewers.  Please try again soon.");
+							$("#message").show();
+							$("#loading").hide();
+						}
+						else if(evt.data.indexOf('NOT') == 0) {
 
 							$("#message").show();
 							$("#loading").hide();
@@ -352,7 +374,7 @@ function sourceOpen() {
 			      var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
 			      tmp.set(new Uint8Array(buffer1), 0);
 			      tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
-			      return tmp.buffer;
+			      return tmp;
 			    }
 
 			    function arrayBufferToBase64( buffer ) {

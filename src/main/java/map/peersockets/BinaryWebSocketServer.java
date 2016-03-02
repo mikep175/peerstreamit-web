@@ -126,6 +126,7 @@ public class BinaryWebSocketServer {
 	  //notify ps of psikey
 	  if(message.indexOf("PSISERVKEY:") == 0) {
 		  
+		  
 		  if(listeningKeys.containsKey(senderSession.getId()) == false) {
 			  
 			  listeningKeys.put(senderSession.getId(), new ArrayList<String>());
@@ -136,7 +137,40 @@ public class BinaryWebSocketServer {
 		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key Listening: " + senderSession.getId() + " - " + message.substring(11));
 		  return;
 	  }
-	  
+	//notify ps of psikey remove
+	  else if(message.indexOf("PSIREMOVESERVKEY:") == 0) {
+
+		  if(streamingSessions.values().contains(senderSession.getId()) == true) {
+			  
+
+			  String destSessionId = null;
+			  
+			  for(String ss : streamingSessions.keySet()) {
+				  
+				  if(streamingSessions.get(ss).compareTo(senderSession.getId()) == 0) {
+					  
+					  destSessionId = ss;
+					  break;
+				  }
+			  }
+			  
+			  if(destSessionId != null) {
+				  
+				  streamingSessions.remove(destSessionId);
+				  sendSessionMessage("PSIKILL", destSessionId);
+			  }
+		  }
+		  
+		  if(listeningKeys.containsKey(senderSession.getId()) == true) {
+			  
+			  listeningKeys.remove(senderSession.getId());
+			  
+		  }
+		  
+		  listeningKeys.get(senderSession.getId()).add(message.substring(11));
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key Listening: " + senderSession.getId() + " - " + message.substring(11));
+		  return;
+	  }
 	  //check psikey for availability
 	  else if(message.indexOf("PSICLIKEY:") == 0) {
 		  
@@ -215,6 +249,28 @@ public class BinaryWebSocketServer {
 			    		challengeRequests.put(sid, senderSession.getId());
 			    		
 			    		session.getBasicRemote().sendText("PSICHALLENGE");
+			    	}
+			    } catch (IOException ex) {
+			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+			    }
+		  }
+		  
+		  //password challenge
+	  }
+	  
+	  //psikey max streams reached
+	  else if(message.indexOf("PSIMAX:") == 0) {
+		  
+		  String nsi = message.substring(13);
+		  String sid = streamingRequests.get(nsi);
+		  
+		  for (Session session : sessions) {
+			    try {
+			    	if(session.getId().compareTo(sid) == 0) {
+			    		
+			    		challengeRequests.put(sid, senderSession.getId());
+			    		
+			    		session.getBasicRemote().sendText("PSIMAX");
 			    	}
 			    } catch (IOException ex) {
 			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
