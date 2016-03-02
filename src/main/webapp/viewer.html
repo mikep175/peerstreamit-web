@@ -272,6 +272,10 @@ function sourceOpen() {
 							$("#loading").hide();
 							$("#imageViewer").hide();
 							$("video").hide();
+
+							try{
+								video.stop();
+							}catch(err) {}
 						}
 						else if(evt.data.indexOf('PSIMAX') == 0) {
 
