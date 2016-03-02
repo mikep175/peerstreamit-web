@@ -261,7 +261,7 @@ public class BinaryWebSocketServer {
 	  //psikey max streams reached
 	  else if(message.indexOf("PSIMAX:") == 0) {
 		  
-		  String nsi = message.substring(13);
+		  String nsi = message.substring(7);
 		  String sid = streamingRequests.get(nsi);
 		  
 		  for (Session session : sessions) {
