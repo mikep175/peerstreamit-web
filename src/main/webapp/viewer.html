@@ -280,6 +280,12 @@ function sourceOpen() {
 						else if(evt.data.indexOf('PSIROTATE') == 0) {
 
 							$("video").css("transform", "rotate(90deg)");
+
+							$("video").width($("#image-wrap").height() - 76);
+
+							$(window).on('resize', function(){
+								$("video").width($("#image-wrap").height() - 76);
+							});
 						}
 						else if(evt.data.indexOf('PSIMAX') == 0) {
 
