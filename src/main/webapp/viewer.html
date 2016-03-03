@@ -277,6 +277,10 @@ function sourceOpen() {
 								video.stop();
 							}catch(err) {}
 						}
+						else if(evt.data.indexOf('PSIROTATE') == 0) {
+
+							$("video").css(transform, "rotate(90deg);");
+						}
 						else if(evt.data.indexOf('PSIMAX') == 0) {
 
 							$("#message h2").text("This stream has reached the maximum number of viewers.  Please try again soon.");
