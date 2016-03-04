@@ -95,7 +95,7 @@ var supportsVideo = true;
 var imageMode = false;
 
 var queue = [];
-var ready = true;
+var ready = false;
 var audioMode = false;
 
 function sourceOpen() {
@@ -105,6 +105,8 @@ function sourceOpen() {
     } else {
     	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42c01f, mp4a.40.2"');
     }
+
+    ready = true;
    
 	sourceBuffer.addEventListener('updateend', function() {
 		
@@ -182,9 +184,6 @@ function sourceOpen() {
             	  supportsVideo = false;
             	}
 
-            	mediaSource = new MediaSource();
-
-            	mediaSource.addEventListener('sourceopen', sourceOpen);
             	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
 
 				video.src = window.URL.createObjectURL(mediaSource);
@@ -210,6 +209,10 @@ function sourceOpen() {
 								return;
 							}
 							if(first == true) {
+
+				            	mediaSource = new MediaSource();
+
+				            	mediaSource.addEventListener('sourceopen', sourceOpen);
 	
 								$("#loading").hide();
 								$("video").show();
