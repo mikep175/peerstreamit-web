@@ -210,9 +210,14 @@ function sourceOpen() {
 							}
 							if(first == true) {
 
+
+
 				            	mediaSource = new MediaSource();
 
 				            	mediaSource.addEventListener('sourceopen', sourceOpen);
+				            	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
+
+								video.src = window.URL.createObjectURL(mediaSource);
 	
 								$("#loading").hide();
 								$("video").show();
