@@ -96,13 +96,17 @@ var imageMode = false;
 
 var queue = [];
 var ready = true;
+var audioMode = false;
 
 function sourceOpen() {
 
-	sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');//'video/webm; codecs="vorbis,vp8"');//video/mp4; codecs="avc1.42c01f, mp3"
-
-    
-	sourceBuffer.addEventListener('updateend', function() { 
+	if(audioMode == true) {
+		sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');//'video/webm; codecs="vorbis,vp8"');//video/mp4; codecs="avc1.42c01f, mp4a.40.5"
+    } else {
+    	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42c01f, mp4a.40.2"');
+    }
+   
+	sourceBuffer.addEventListener('updateend', function() {
 		
 	  if ( queue.length && queue.length > 0) {
 
@@ -276,6 +280,10 @@ function sourceOpen() {
 							try{
 								video.stop();
 							}catch(err) {}
+						}
+						else if(evt.data.indexOf('PSIAUDIO') == 0) {
+
+							audioMode = true;
 						}
 						else if(evt.data.indexOf('PSIROTATE') == 0) {
 
