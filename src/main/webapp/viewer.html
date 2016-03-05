@@ -201,78 +201,77 @@ function sourceOpen() {
 
 					if(evt.data.size) {
 
-						if(imageMode == false) {
-
-							if(supportsVideo == false) {
-
-								window.location = 'http://caniuse.com/#feat=mediasource';
-								return;
-							}
-							if(first == true) {
-
-
-
-				            	mediaSource = new MediaSource();
-
-				            	mediaSource.addEventListener('sourceopen', sourceOpen);
-				            	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
-
-								video.src = window.URL.createObjectURL(mediaSource);
+							if(imageMode == false) {
 	
-								$("#loading").hide();
-								$("video").show();
+								if(supportsVideo == false) {
 	
-								setInterval(function() {
+									window.location = 'http://caniuse.com/#feat=mediasource';
+									return;
+								}
+								if(first == true) {
 	
-									websocket.send("PSITIME:" + video.currentTime);
 	
-								}, 3000);
 	
-								first = false;
-							}
-						}
-						
-						var arrayBuffer;
-						var fileReader = new FileReader();
-						fileReader.onload = function() {
+					            	mediaSource = new MediaSource();
+	
+					            	mediaSource.addEventListener('sourceopen', sourceOpen);
+					            	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
+	
+									video.src = window.URL.createObjectURL(mediaSource);
+		
+									$("#loading").hide();
+									$("video").show();
+		
+									setInterval(function() {
+		
+										websocket.send("PSITIME:" + video.currentTime);
+		
+									}, 3000);
+		
+									first = false;
+								}
 							
-						    arrayBuffer = this.result;
-						    
-							if(imageMode == true) {
-
-								queue.push(arrayBuffer);
-
-							} else {
-								if(ready == true) {
-	
-									if ( queue.length && queue.length > 0) {
+							var arrayBuffer;
+							var fileReader = new FileReader();
+							fileReader.onload = function() {
+								
+							    arrayBuffer = this.result;
+							    
+									if(ready == true) {
+		
+										if ( queue.length && queue.length > 0) {
+											queue.push(arrayBuffer);
+										    sourceBuffer.appendBuffer(queue.shift());
+										    ready = false;
+										    
+										}
+										else {
+								    		sourceBuffer.appendBuffer(arrayBuffer);
+											ready = false;
+										}
+									}else {
+		
 										queue.push(arrayBuffer);
-									    sourceBuffer.appendBuffer(queue.shift());
-									    ready = false;
-									    
-									}
-									else {
-							    		sourceBuffer.appendBuffer(arrayBuffer);
-										ready = false;
-									}
-								}else {
+		
+								    }
 	
-									queue.push(arrayBuffer);
+							    if (dataStart == null) {
+							    	//$("#stream-status").text("Buffering");
 	
-							    }
-							}
+							    	dataStart = new Date();
+						            //video.play(); // Start playing after 1st chunk is appended.
+						          }
+							    
+							};
+							
+							fileReader.readAsArrayBuffer(evt.data);
 
-						    if (dataStart == null) {
-						    	//$("#stream-status").text("Buffering");
+						} else {
 
-						    	dataStart = new Date();
-					            //video.play(); // Start playing after 1st chunk is appended.
-					          }
-						    
-						};
-						
-						fileReader.readAsArrayBuffer(evt.data);
 
+							queue.push(evt.data);
+
+						}
 					}
 					else if(evt.data && evt.data.indexOf) {
 
@@ -318,16 +317,23 @@ function sourceOpen() {
 
 							var img = $("#imageViewer");
 
-							var finalBuffer = queue[0];
+// 							var finalBuffer = queue[0];
 							
-							for(var i = 1; i < queue.length; i++) {
+// 							for(var i = 1; i < queue.length; i++) {
 
-								finalBuffer = appendBuffers(finalBuffer, queue[i]);
-							}
+// 								finalBuffer = appendBuffers(finalBuffer, queue[i]);
+// 							}
 							
-							img.attr('src', 'data:image/png;base64,' + arrayBufferToBase64(finalBuffer));
+// 							img.attr('src', 'data:image/png;base64,' + arrayBufferToBase64(finalBuffer));
 
+							var blob = new Blob(queue, {type: 'application/octet-binary'});
+
+							var url = URL.createObjectURL(blob);
+							
+							img.attr('src', url);
+							
 							img.show();
+							
 							$("#loading").hide();
 						}
 						else if(evt.data.indexOf('PSIPIC') == 0) {
