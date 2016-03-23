@@ -205,7 +205,7 @@ public class BinaryWebSocketServer {
 								    		
 								    		if(sup.getUserProperties().containsKey("user-agent") == true) {
 								    			
-								    			origin = (String) sup.getUserProperties().get("user-agent");
+								    			userAgent = (String) sup.getUserProperties().get("user-agent");
 								    		}
 					 			   
 					 			    	}
