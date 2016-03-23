@@ -19,8 +19,8 @@ public class ServletAwareConfig extends ServerEndpointConfig.Configurator {
 	    	if (request.getHeaders().containsKey("user-agent")) {
 	    		config.getUserProperties().put("user-agent", request.getHeaders().get("user-agent").get(0)); 
 	        }
-	    	if (request.getHeaders().containsKey("x-client-ip")) {
-	    		config.getUserProperties().put("origin", request.getHeaders().get("x-client-ip").get(0)); 
+	    	if (request.getHeaders().containsKey("x-forwarded-for")) { //X-Forwarded-For
+	    		config.getUserProperties().put("origin", request.getHeaders().get("x-forwarded-for").get(0)); 
 	        }
 	    } catch (Exception ex) {
 		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
