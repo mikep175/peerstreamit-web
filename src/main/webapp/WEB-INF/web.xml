@@ -8,6 +8,6 @@
 
     <servlet-mapping>
         <servlet-name>javax.ws.rs.core.Application</servlet-name>
-        <url-pattern>/hls/*</url-pattern>
+        <url-pattern>/HLS/*</url-pattern>
     </servlet-mapping>
 </web-app>
