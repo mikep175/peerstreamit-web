@@ -16,7 +16,7 @@ public class HLSStreaming {
     	return "test";
     }
     
-//    @GET
+//    @GET 
 //    @Produces(MediaType.APPLICATION_OCTET_STREAM)
 //    public Response getFile() {
 //      File file = new File();
