@@ -10,8 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/HLS")
-@Consumes({ "application/json" })
-@Produces({ "application/json" })
+@Produces(MediaType.TEXT_PLAIN)
 public class HLS {
  
     @GET
