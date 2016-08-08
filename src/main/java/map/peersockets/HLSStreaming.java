@@ -102,26 +102,11 @@ public class HLSStreaming {
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "chunk.mp4 : " + sid + " : " + nsi);
     	
     	if(BinaryWebSocketServer.streamingSessions.values().contains(sid) == true) {
-  		  
-  		  String destSessionId = null;
-  		  
-  		  for(String ss : BinaryWebSocketServer.streamingSessions.keySet()) {
-  			  
-  			  if(BinaryWebSocketServer.streamingSessions.get(ss).compareTo(sid) == 0) {
-  				  
-  				  destSessionId = ss;
-  				  break;
-  			  }
-  		  }
-  		  
-  		  if(destSessionId != null) {
-  		
-  			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + ":" + nsi + ":" + loc, destSessionId);
+
+  			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + ":" + nsi + ":" + loc, sid);
   			
   			checkForBytes(nsi + ":" + loc, asyncResponse);
-  		  } else { 
-  	  		asyncResponse.cancel();
-  	  	  }
+  			
   	  } else {
   		asyncResponse.cancel();
   	  }
