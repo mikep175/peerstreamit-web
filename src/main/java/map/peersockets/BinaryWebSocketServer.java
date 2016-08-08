@@ -230,7 +230,7 @@ public class BinaryWebSocketServer {
 					 			    	}
 					    		 }
 					    		
-					    		session.getBasicRemote().sendText(message + ":" + nsi + ":" + origin + ":" + userAgent + ":" + (hls ? "1" : "0"));
+					    		session.getBasicRemote().sendText("PSICLIKEY:" + psiKey + ":" + nsi + ":" + origin + ":" + userAgent + ":" + (hls ? "1" : "0"));
 					    		
 					    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key found: " + message + " - " + nsi);
 					    		
