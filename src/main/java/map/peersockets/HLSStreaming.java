@@ -103,7 +103,7 @@ public class HLSStreaming {
     	
     	if(BinaryWebSocketServer.streamingSessions.containsKey(sid) == true) {
 
-  			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + ":" + nsi + ":" + loc, BinaryWebSocketServer.streamingSessions.get(sid));
+  			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + nsi + ":" + loc, BinaryWebSocketServer.streamingSessions.get(sid));
   			
   			checkForBytes(nsi + ":" + loc, asyncResponse);
   			
