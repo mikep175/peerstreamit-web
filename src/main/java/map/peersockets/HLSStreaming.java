@@ -97,6 +97,9 @@ public class HLSStreaming {
 		}
 		
 		final String nsi = nsinf;
+		
+
+		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "chunk.mp4 : " + sid + " : " + nsi);
     	
     	if(BinaryWebSocketServer.streamingSessions.values().contains(sid) == true) {
   		  
