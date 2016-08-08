@@ -101,9 +101,9 @@ public class HLSStreaming {
 
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "chunk.mp4 : " + sid + " : " + nsi);
     	
-    	if(BinaryWebSocketServer.streamingSessions.values().contains(sid) == true) {
+    	if(BinaryWebSocketServer.streamingSessions.containsKey(sid) == true) {
 
-  			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + ":" + nsi + ":" + loc, sid);
+  			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + ":" + nsi + ":" + loc, BinaryWebSocketServer.streamingSessions.get(sid));
   			
   			checkForBytes(nsi + ":" + loc, asyncResponse);
   			

@@ -372,6 +372,7 @@ public class BinaryWebSocketServer {
 			    		
 			    		
 			    		hlsNSIs.put(nsi, new Double(raw[1]));
+			  		    streamingSessions.put(sid, senderSession.getId());
 			  		    streamingSessions.put(id, streamingRequests.get(nsi));
 			    		session.getBasicRemote().sendText("HLSKEY:" + id);
 			    	}
