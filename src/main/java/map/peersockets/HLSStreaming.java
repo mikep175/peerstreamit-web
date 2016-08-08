@@ -33,8 +33,8 @@ public class HLSStreaming {
 		  
 		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
 				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
-				"#EXT-X-TARGETDURATION:10\r\n" +
-				"#EXT-X-VERSION:4\r\n" +
+				"#EXT-X-TARGETDURATION:3\r\n" +
+				"#EXT-X-VERSION:3\r\n" +
 				"#EXT-X-MEDIA-SEQUENCE:0\r\n" +
 				"#EXT-X-MAP:URI=moov.mp4\r\n");
 		
@@ -52,7 +52,7 @@ public class HLSStreaming {
 				
 				while (length > 3) {
 					
-					ret.append("#EXTINF:3.0,\r\n");
+					ret.append("\r\n#EXTINF:3.0,\r\n");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
 					length -= 3;
@@ -60,7 +60,7 @@ public class HLSStreaming {
 				}
 
 				if(length > 0) {
-					ret.append("#EXTINF:"+decimalFormat.format(length)+".0,\r\n");
+					ret.append("\r\n#EXTINF:"+decimalFormat.format(length)+".0,\r\n");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 				}
 			}
@@ -87,7 +87,7 @@ public class HLSStreaming {
     	
     	for(String nsi : BinaryWebSocketServer.streamingRequests.keySet()) {
 			
-			if(BinaryWebSocketServer.streamingRequests.get(nsi).compareTo(sid) == 0) {
+			if(BinaryWebSocketServer.streamingRequests.get(nsi) != null && BinaryWebSocketServer.streamingRequests.get(nsi).compareTo(sid) == 0) {
 				
 				nsinf = nsi;
 				break;
