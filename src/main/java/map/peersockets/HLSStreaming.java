@@ -33,7 +33,7 @@ public class HLSStreaming {
 		  
 		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
 				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
-				"#EXT-X-TARGETDURATION:3\r\n" +
+				"#EXT-X-TARGETDURATION:10\r\n" +
 				"#EXT-X-VERSION:3\r\n" +
 				"#EXT-X-MEDIA-SEQUENCE:0\r\n" +
 				"#EXT-X-MAP:URI=moov.mp4\r\n");
@@ -50,13 +50,13 @@ public class HLSStreaming {
 				
 				int loc = 0;
 				
-				while (length > 3) {
+				while (length > 10) {
 					
-					ret.append("\r\n#EXTINF:3.0,\r\n");
+					ret.append("\r\n#EXTINF:10.0,\r\n");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
-					length -= 3;
-					loc += 3;
+					length -= 10;
+					loc += 10;
 				}
 
 				if(length > 0) {
