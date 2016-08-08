@@ -72,7 +72,7 @@ public class HLSStreaming {
     	
     	return ret.toString();
     }
-	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(100);
+	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
     @GET 
     @Path("chunk.mp4")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -133,7 +133,7 @@ public class HLSStreaming {
 				
 				if(BinaryWebSocketServer.hlsFragsFinal.containsKey(hlsId) == true) {
 					
-					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.get(hlsId), MediaType.APPLICATION_OCTET_STREAM).build());
+					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.remove(hlsId), MediaType.APPLICATION_OCTET_STREAM).build());
 					
 				} else {
 					checkForBytes(hlsId, asyncResponse);
