@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +28,9 @@ public class HLSStreaming {
     @GET
     @Path("playlist.m3u8")
     public String playlist(@QueryParam("sid") String sid) {
-		
+
+		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + sid);
+		  
 		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
 				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
 				"#EXT-X-TARGETDURATION:10\r\n" +

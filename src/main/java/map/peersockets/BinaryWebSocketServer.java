@@ -376,7 +376,7 @@ public class BinaryWebSocketServer {
 			    }
 		  }
 		  
-		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSIHLSINIT : " + senderSession.getId() + " - " + nsi);
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSIHLSINIT : " + sid + " - " + nsi);
 	  }
 	  //new socket set to handle streaming
 	  else if(message.indexOf("PSISTREAMHLS:") == 0) {

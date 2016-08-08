@@ -351,6 +351,9 @@ function sourceOpen() {
 
 							addSourceToVideo(video, 'https://app.peerstreamit.com/HLS/streaming/playlist.m3u8?sid=' + hlsKey, 'application/x-mpegURL');
 
+							$("#loading").hide();
+							$("video").show();
+							
 							video.play();
 						}
 						else if(evt.data.indexOf('TC:') == 0) {
