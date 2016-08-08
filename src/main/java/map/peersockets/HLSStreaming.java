@@ -32,11 +32,11 @@ public class HLSStreaming {
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + hlsId);
 		  
 		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
-				//"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
+				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
 				"#EXT-X-TARGETDURATION:4\r\n" +
-				//"#EXT-X-VERSION:4\r\n" +
-				"#EXT-X-MEDIA-SEQUENCE:0");// + //\r\n
-				//"#EXT-X-MAP:URI=moov.mp4\r\n");
+				"#EXT-X-VERSION:4\r\n" +
+				"#EXT-X-MEDIA-SEQUENCE:0" +// + //\r\n
+				"#EXT-X-MAP:URI=moov.mp4\r\n");
 		
 		 DecimalFormat decimalFormat=new DecimalFormat("#");
 		 
