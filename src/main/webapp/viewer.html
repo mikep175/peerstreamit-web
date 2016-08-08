@@ -349,7 +349,9 @@ function sourceOpen() {
 
 							hlsKey = evt.data.split(':')[1];
 
-							//setupHLS here
+							addSourceToVideo(video, 'https://app.peerstreamit.com/HLS/streaming/playlist.m3u8?sid=' + hlsKey, 'application/x-mpegURL');
+
+							video.play();
 						}
 						else if(evt.data.indexOf('TC:') == 0) {
 	
@@ -426,6 +428,15 @@ function sourceOpen() {
 			            binary += String.fromCharCode( bytes[ i ] );
 			        }
 			        return window.btoa( binary );
+			    }
+
+			    function addSourceToVideo(element, src, type) {
+			        var source = document.createElement('source');
+
+			        source.src = src;
+			        source.type = type;
+
+			        element.appendChild(source);
 			    }
         </script>
         <script>

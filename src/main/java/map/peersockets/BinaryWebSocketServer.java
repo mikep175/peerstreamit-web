@@ -191,7 +191,8 @@ public class BinaryWebSocketServer {
 		  if(psiKey.indexOf(":HLS") >= 0) {
 			  
 			  hls = true;
-			  
+			  psiKey = psiKey.replaceAll(":HLS", "");
+			  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "HLS Detected: " + senderSession.getId() + " - " + message.substring(11));
 		  }
 		  
 		  boolean found = false;
