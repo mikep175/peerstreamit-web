@@ -52,7 +52,7 @@ public class HLSStreaming {
 				
 				while (length > 4) {
 					
-					ret.append("\r\n#EXTINF:10.0,\r\n");
+					ret.append("\r\n#EXTINF:4.0,\r\n");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
 					length -= 4;
