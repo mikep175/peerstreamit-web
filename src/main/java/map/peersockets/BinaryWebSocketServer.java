@@ -227,7 +227,7 @@ public class BinaryWebSocketServer {
 								    			userAgent = (String) sup.getUserProperties().get("user-agent");
 								    		}
 					 			   
-					 			    	}
+					 			    	} 
 					    		 }
 					    		
 					    		session.getBasicRemote().sendText("PSICLIKEY:" + psiKey + ":" + nsi + ":" + origin + ":" + userAgent + ":" + (hls ? "1" : "0"));
