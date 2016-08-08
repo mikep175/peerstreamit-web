@@ -501,11 +501,12 @@ public class BinaryWebSocketServer {
 	  if(hlsSessions.containsKey(senderSession.getId()) == true) {
 
 		  String hlsId = hlsSessions.get(senderSession.getId());
+		  byte[] b = new byte[byteBuffer.remaining()];
+		  byteBuffer.get(b);
 		  
 		  if(hlsFrags.containsKey(hlsId)) {
 			  
 			  byte[] a = hlsFrags.get(hlsId);
-			  byte[] b = byteBuffer.array();
 			  
 			  byte[] c = new byte[a.length + b.length];
 			  System.arraycopy(a, 0, c, 0, a.length);
@@ -513,7 +514,7 @@ public class BinaryWebSocketServer {
 			  hlsFrags.put(hlsId, c);
 		  } else {
 
-			  hlsFrags.put(hlsId, byteBuffer.array());
+			  hlsFrags.put(hlsId, b);
 		  }
 		  
 		  
