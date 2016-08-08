@@ -50,13 +50,13 @@ public class HLSStreaming {
 				
 				int loc = 0;
 				
-				while (length > 10) {
+				while (length > 3) {
 					
-					ret.append("#EXTINF:10.0,\r\n");
+					ret.append("#EXTINF:3.0,\r\n");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
-					length -= 10;
-					loc += 10;
+					length -= 3;
+					loc += 3;
 				}
 
 				if(length > 0) {
@@ -131,9 +131,9 @@ public class HLSStreaming {
 			@Override
 			public void run() {
 				
-				if(BinaryWebSocketServer.hlsFrags.containsKey(hlsId) == true) {
+				if(BinaryWebSocketServer.hlsFragsFinal.containsKey(hlsId) == true) {
 					
-					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFrags.get(hlsId), MediaType.APPLICATION_OCTET_STREAM).build());
+					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.get(hlsId), MediaType.APPLICATION_OCTET_STREAM).build());
 					
 				} else {
 					checkForBytes(hlsId, asyncResponse);

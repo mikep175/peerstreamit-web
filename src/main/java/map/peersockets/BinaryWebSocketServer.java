@@ -31,6 +31,9 @@ public class BinaryWebSocketServer {
 
 	static final Map<String, String> hlsSessions =
 			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
+
+	static final Map<String, byte[]> hlsFragsFinal =
+			(Map<String, byte[]>)Collections.synchronizedMap(new HashMap<String, byte[]>());
 	
 	static final Map<String, byte[]> hlsFrags =
 			(Map<String, byte[]>)Collections.synchronizedMap(new HashMap<String, byte[]>());
@@ -407,6 +410,34 @@ public class BinaryWebSocketServer {
 		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAMHLS : " + senderSession.getId() + " - " + nsi);
 	  }
 	  //new socket set to handle streaming
+	  else if(message.indexOf("PSIENDSTREAMHLS:") == 0) {
+		  
+		  String nsi = message.substring(16);
+		  
+		  String sid = streamingRequests.get(nsi);
+		  
+		  String hlsId = "";
+		  
+		  for(String key : streamingSessions.keySet()) {
+			  
+			  if(streamingSessions.get(key).compareTo(sid) == 0) {
+				  
+				  hlsId = key;
+				  break;
+				  
+			  }
+			  
+		  }
+
+		  if(hlsFrags.containsKey(hlsId)) {
+			  
+			  hlsFragsFinal.put(hlsId, hlsFrags.remove(hlsId));
+			  
+		  }
+		  
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAMHLS : " + senderSession.getId() + " - " + nsi);
+	  }
+	  //new socket set to handle streaming
 	  else if(message.indexOf("PSISTREAM:") == 0) {
 		  
 		  String nsi = message.substring(10);
@@ -483,7 +514,20 @@ public class BinaryWebSocketServer {
 
 		  String hlsId = hlsSessions.get(senderSession.getId());
 		  
-		  hlsFrags.put(hlsId, byteBuffer.array());
+		  if(hlsFrags.containsKey(hlsId)) {
+			  
+			  byte[] a = hlsFrags.get(hlsId);
+			  byte[] b = byteBuffer.array();
+			  
+			  byte[] c = new byte[a.length + b.length];
+			  System.arraycopy(a, 0, c, 0, a.length);
+			  System.arraycopy(b, 0, c, a.length, b.length);
+			  hlsFrags.put(hlsId, c);
+		  } else {
+
+			  hlsFrags.put(hlsId, byteBuffer.array());
+		  }
+		  
 		  
 	  }
 	  else {
