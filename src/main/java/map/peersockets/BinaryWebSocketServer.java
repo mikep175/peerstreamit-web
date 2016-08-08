@@ -388,10 +388,24 @@ public class BinaryWebSocketServer {
 		  
 		  String nsi = raw[0];
 		  
-		  streamingSessions.put(senderSession.getId(), streamingRequests.get(nsi));
-		  hlsSessions.put(senderSession.getId(), message.substring(13));
+		  String sid = streamingRequests.get(nsi);
 		  
-		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAM : " + senderSession.getId() + " - " + nsi);
+		  String hlsId = "";
+		  
+		  for(String key : streamingSessions.keySet()) {
+			  
+			  if(streamingSessions.get(key).compareTo(sid) == 0) {
+				  
+				  hlsId = key;
+				  break;
+				  
+			  }
+			  
+		  }
+		  
+		  hlsSessions.put(senderSession.getId(), hlsId + ":" + raw[1]);
+		  
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAMHLS : " + senderSession.getId() + " - " + nsi);
 	  }
 	  //new socket set to handle streaming
 	  else if(message.indexOf("PSISTREAM:") == 0) {
