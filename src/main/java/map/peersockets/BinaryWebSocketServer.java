@@ -353,8 +353,6 @@ public class BinaryWebSocketServer {
 			    }
 		  }
 	  }
-
-	  //new socket set to handle streaming
 	  else if(message.indexOf("PSIHLSINIT:") == 0) {
 		  
 		  String[] raw = message.substring(11).split(":");
@@ -404,6 +402,7 @@ public class BinaryWebSocketServer {
 		  }
 		  
 		  hlsSessions.put(senderSession.getId(), hlsId + ":" + raw[1]);
+		  streamingSessions.put(senderSession.getId(), streamingRequests.get(nsi));
 		  
 		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAMHLS : " + senderSession.getId() + " - " + nsi);
 	  }
