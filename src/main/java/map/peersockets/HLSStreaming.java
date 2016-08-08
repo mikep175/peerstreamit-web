@@ -68,7 +68,7 @@ public class HLSStreaming {
 			
 		}
 		
-    	ret.append("#EXT-X-ENDLIST");
+    	ret.append("\r\n#EXT-X-ENDLIST");
     	
     	return ret.toString();
     }
