@@ -27,9 +27,9 @@ public class HLSStreaming {
 	@Produces({ "application/x-mpegURL" })
     @GET
     @Path("playlist.m3u8")
-    public String playlist(@QueryParam("sid") String sid) {
+    public String playlist(@QueryParam("sid") String hlsId) {
 
-		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + sid);
+		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + hlsId);
 		  
 		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
 				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
@@ -40,9 +40,11 @@ public class HLSStreaming {
 		
 		 DecimalFormat decimalFormat=new DecimalFormat("#");
 		 
+		String sid = BinaryWebSocketServer.streamingSessions.get(hlsId);
+		 
 		for(String nsi : BinaryWebSocketServer.streamingRequests.keySet()) {
 			
-			if(BinaryWebSocketServer.streamingRequests.get(nsi) == sid) {
+			if(BinaryWebSocketServer.streamingRequests.get(nsi).compareTo(sid) == 0) {
 				
 				Double length = BinaryWebSocketServer.hlsNSIs.get(nsi);
 				

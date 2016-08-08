@@ -363,20 +363,23 @@ public class BinaryWebSocketServer {
 
 		  String sid = streamingRequests.get(nsi);
 
+  		  String id = nextSessionId();
+  		  
 		  for (Session session : sessions) {
 			    try {
 			    	if(session.getId().compareTo(sid) == 0) {
-
+			    		
+			    		
 			    		hlsNSIs.put(nsi, new Double(raw[1]));
-			  		    streamingSessions.put(senderSession.getId(), streamingRequests.get(nsi));
-			    		session.getBasicRemote().sendText("HLSKEY:" + sid);
+			  		    streamingSessions.put(id, streamingRequests.get(nsi));
+			    		session.getBasicRemote().sendText("HLSKEY:" + id);
 			    	}
 			    } catch (IOException ex) {
 			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
 			    }
 		  }
 		  
-		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSIHLSINIT : " + sid + " - " + nsi);
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSIHLSINIT : " + id + " - " + nsi);
 	  }
 	  //new socket set to handle streaming
 	  else if(message.indexOf("PSISTREAMHLS:") == 0) {
