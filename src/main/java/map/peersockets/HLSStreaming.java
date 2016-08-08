@@ -36,7 +36,7 @@ public class HLSStreaming {
 				"#EXT-X-TARGETDURATION:4\r\n" +
 				"#EXT-X-VERSION:4\r\n" +
 				"#EXT-X-MEDIA-SEQUENCE:0" +// + //\r\n
-				"#EXT-X-MAP:URI=chunk.mp4\r\n");
+				"#EXT-X-MAP:URI=\"chunk.mp4\"\r\n");
 		
 		 DecimalFormat decimalFormat=new DecimalFormat("#");
 		 
@@ -53,7 +53,7 @@ public class HLSStreaming {
 				while (length > 4) {
 					
 					ret.append("\r\n#EXTINF:4.0,\r\n");
-					ret.append("/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
+					ret.append("chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
 					length -= 4;
 					loc += 4;
@@ -61,7 +61,7 @@ public class HLSStreaming {
 
 				if(length > 0) {
 					ret.append("\r\n#EXTINF:"+decimalFormat.format(length)+".0,\r\n");
-					ret.append("/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
+					ret.append("chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 				}
 			}
 			
