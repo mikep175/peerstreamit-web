@@ -116,7 +116,7 @@ public class HLSStreaming {
   			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + ":" + nsi + ":" + loc, destSessionId);
   			
   			checkForBytes(nsi + ":" + loc, asyncResponse);
-  		  } else {
+  		  } else { 
   	  		asyncResponse.cancel();
   	  	  }
   	  } else {
