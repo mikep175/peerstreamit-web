@@ -53,7 +53,7 @@ public class HLSStreaming {
 				while (length > 10) {
 					
 					ret.append("#EXTINF:10.0,\r\n");
-					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + sid + "&loc=" + decimalFormat.format(loc));
+					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
 					length -= 10;
 					loc += 10;
@@ -61,7 +61,7 @@ public class HLSStreaming {
 
 				if(length > 0) {
 					ret.append("#EXTINF:"+decimalFormat.format(length)+".0,\r\n");
-					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + sid + "&loc=" + decimalFormat.format(loc));
+					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 				}
 			}
 			
@@ -76,18 +76,20 @@ public class HLSStreaming {
     @GET 
     @Path("chunk.mp4")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public void getFile(@QueryParam("sid") String sid, @QueryParam("loc") String loc, @Context HttpServletRequest requestContext,
+    public void getFile(@QueryParam("sid") String hlsId, @QueryParam("loc") String loc, @Context HttpServletRequest requestContext,
             @Context HttpServletResponse response,
             @Suspended AsyncResponse asyncResponse) {
     	
 
+		String sid = BinaryWebSocketServer.streamingSessions.get(hlsId);
+		
     	String nsinf = null;
     	
-		for(String nsitemp : BinaryWebSocketServer.streamingRequests.keySet()) {
+    	for(String nsi : BinaryWebSocketServer.streamingRequests.keySet()) {
 			
-			if(BinaryWebSocketServer.streamingRequests.get(nsitemp) == sid) {
+			if(BinaryWebSocketServer.streamingRequests.get(nsi).compareTo(sid) == 0) {
 				
-				nsinf = nsitemp;
+				nsinf = nsi;
 				break;
 				
 			}
