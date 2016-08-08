@@ -25,19 +25,28 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/sockets", configurator=ServletAwareConfig.class)
 public class BinaryWebSocketServer {
-    
+
+	static final Map<String, Double> hlsNSIs =
+			(Map<String, Double>)Collections.synchronizedMap(new HashMap<String, Double>());
+
+	static final Map<String, String> hlsSessions =
+			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
+	
+	static final Map<String, byte[]> hlsFrags =
+			(Map<String, byte[]>)Collections.synchronizedMap(new HashMap<String, byte[]>());
+	
 	private static final Map<String, String> challengeRequests =
 			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
 	
-	private static final Map<String, String> streamingRequests =
+	public static final Map<String, String> streamingRequests =
 			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
 	
-	private static final Map<String, String> streamingSessions =
+	static final Map<String, String> streamingSessions =
 			(Map<String, String>)Collections.synchronizedMap(new HashMap<String, String>());
 	
 	private static final Map<String, List<String>> listeningKeys =
 	(Map<String, List<String>>)Collections.synchronizedMap(new HashMap<String, List<String>>());
-	
+
 	private static final Set<Session> sessions =
 			(Set<Session>)Collections.synchronizedSet(new HashSet<Session>());
 	
@@ -176,6 +185,15 @@ public class BinaryWebSocketServer {
 		  
 		  String psiKey = message.substring(10);
 		  
+		  
+		  boolean hls = false;
+		  
+		  if(psiKey.indexOf(":HLS") >= 0) {
+			  
+			  hls = true;
+			  
+		  }
+		  
 		  boolean found = false;
 		  
 		  for(Map.Entry<String, List<String>> lk : listeningKeys.entrySet()) {
@@ -211,7 +229,8 @@ public class BinaryWebSocketServer {
 					 			    	}
 					    		 }
 					    		
-					    		session.getBasicRemote().sendText(message + ":" + nsi + ":" + origin + ":" + userAgent);
+					    		session.getBasicRemote().sendText(message + ":" + nsi + ":" + origin + ":" + userAgent + ":" + (hls ? "1" : "0"));
+					    		
 					    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Key found: " + message + " - " + nsi);
 					    		
 					    		found = true;
@@ -333,7 +352,43 @@ public class BinaryWebSocketServer {
 			    }
 		  }
 	  }
-	  
+
+	  //new socket set to handle streaming
+	  else if(message.indexOf("PSIHLSINIT:") == 0) {
+		  
+		  String[] raw = message.substring(11).split(":");
+		  
+		  String nsi = raw[0];
+
+		  String sid = streamingRequests.get(nsi);
+
+		  for (Session session : sessions) {
+			    try {
+			    	if(session.getId().compareTo(sid) == 0) {
+
+			    		hlsNSIs.put(nsi, new Double(raw[1]));
+			  		    streamingSessions.put(senderSession.getId(), streamingRequests.get(nsi));
+			    		session.getBasicRemote().sendText("HLSKEY:" + sid);
+			    	}
+			    } catch (IOException ex) {
+			      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+			    }
+		  }
+		  
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSIHLSINIT : " + senderSession.getId() + " - " + nsi);
+	  }
+	  //new socket set to handle streaming
+	  else if(message.indexOf("PSISTREAMHLS:") == 0) {
+		  
+		  String[] raw = message.substring(13).split(":");
+		  
+		  String nsi = raw[0];
+		  
+		  streamingSessions.put(senderSession.getId(), streamingRequests.get(nsi));
+		  hlsSessions.put(senderSession.getId(), message.substring(13));
+		  
+		  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "PSISTREAM : " + senderSession.getId() + " - " + nsi);
+	  }
 	  //new socket set to handle streaming
 	  else if(message.indexOf("PSISTREAM:") == 0) {
 		  
@@ -389,7 +444,7 @@ public class BinaryWebSocketServer {
 	  }
 	}
 
-	private void sendSessionMessage(String message, String destSessionId) {
+	static void sendSessionMessage(String message, String destSessionId) {
 		for (Session session : sessions) {
 		    try {
 		    	if(session.getId().compareTo(destSessionId) == 0) {
@@ -406,22 +461,30 @@ public class BinaryWebSocketServer {
 	public void onMessage(ByteBuffer byteBuffer, boolean last, Session senderSession) {
 	
 	  Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Binary received.");
-	  
-	  String destSessionId = streamingSessions.get(senderSession.getId());
-	  
-	  if(destSessionId != null) {
+
+	  if(hlsSessions.containsKey(senderSession.getId()) == true) {
+
+		  String hlsId = hlsSessions.get(senderSession.getId());
 		  
-		  for (Session session : sessions) {
-		    try {
-		    	if(session.getId().compareTo(destSessionId) == 0) {
-		    		session.getBasicRemote().sendBinary(byteBuffer);
-		    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Binary sent.");
-		    	}
-		    } catch (IOException ex) {
-		      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
-		    }
-		  }
+		  hlsFrags.put(hlsId, byteBuffer.array());
 		  
 	  }
+	  else {
+		  String destSessionId = streamingSessions.get(senderSession.getId());
+		  
+		  if(destSessionId != null) {
+			  
+				  for (Session session : sessions) {
+				    try {
+				    	if(session.getId().compareTo(destSessionId) == 0) {
+				    		session.getBasicRemote().sendBinary(byteBuffer);
+				    		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "Binary sent.");
+				    	}
+				    } catch (IOException ex) {
+				      Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+				    }
+				  }
+			  }
+		  }
 	}
 }

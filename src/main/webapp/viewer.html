@@ -345,6 +345,12 @@ function sourceOpen() {
 							$('#txtPw').focus();
 
 						}
+						else if(evt.data.indexOf('HLSKEY') == 0) {
+
+							hlsKey = evt.data.split(':')[1];
+
+							//setupHLS here
+						}
 						else if(evt.data.indexOf('TC:') == 0) {
 	
 								var retrieved = evt.data.split(':')[1];

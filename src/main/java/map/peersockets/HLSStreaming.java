@@ -1,6 +1,7 @@
 package map.peersockets;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
@@ -22,36 +24,110 @@ public class HLSStreaming {
 
 	@Produces({ "application/x-mpegURL" })
     @GET
-    @Path("sample.m3u8")
-    public String test() {
-    	return "#EXTM3U\r\n" +
+    @Path("playlist.m3u8")
+    public String playlist(@QueryParam("sid") String sid) {
+		
+		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
 				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
 				"#EXT-X-TARGETDURATION:10\r\n" +
 				"#EXT-X-VERSION:4\r\n" +
 				"#EXT-X-MEDIA-SEQUENCE:0\r\n" +
-				"#EXT-X-MAP:URI=moov.mp4" +
-				"#EXTINF:10.0,\r\n" +
-				"https://app.peerstreamit.com/HLS/streaming/test.mp4" +
-//				"#EXTINF:10.0," +
-//				"http://example.com/movie1/fileSequenceB.ts\r\n" +
-//				"#EXTINF:10.0,\r\n" +
-//				"http://example.com/movie1/fileSequenceC.ts\r\n" +
-//				"#EXTINF:9.0,\r\n" +
-//				"http://example.com/movie1/fileSequenceD.ts\r\n" +
-				"#EXT-X-ENDLIST";
+				"#EXT-X-MAP:URI=moov.mp4\r\n");
+		
+		 DecimalFormat decimalFormat=new DecimalFormat("#");
+		 
+		for(String nsi : BinaryWebSocketServer.streamingRequests.keySet()) {
+			
+			if(BinaryWebSocketServer.streamingRequests.get(nsi) == sid) {
+				
+				Double length = BinaryWebSocketServer.hlsNSIs.get(nsi);
+				
+				int loc = 0;
+				
+				while (length > 10) {
+					
+					ret.append("#EXTINF:10.0,\r\n");
+					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + sid + "&loc=" + decimalFormat.format(loc));
+					
+					length -= 10;
+					loc += 10;
+				}
+
+				if(length > 0) {
+					ret.append("#EXTINF:"+decimalFormat.format(length)+".0,\r\n");
+					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.mp4?sid=" + sid + "&loc=" + decimalFormat.format(loc));
+				}
+			}
+			
+			
+		}
+		
+    	ret.append("#EXT-X-ENDLIST");
+    	
+    	return ret.toString();
     }
 	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(100);
     @GET 
-    @Path("test.mp4")
+    @Path("chunk.mp4")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public void getFile(@Context HttpServletRequest requestContext,
+    public void getFile(@QueryParam("sid") String sid, @QueryParam("loc") String loc, @Context HttpServletRequest requestContext,
             @Context HttpServletResponse response,
             @Suspended AsyncResponse asyncResponse) {
+    	
+
+    	String nsinf = null;
+    	
+		for(String nsitemp : BinaryWebSocketServer.streamingRequests.keySet()) {
+			
+			if(BinaryWebSocketServer.streamingRequests.get(nsitemp) == sid) {
+				
+				nsinf = nsitemp;
+				break;
+				
+			}
+			
+		}
+		
+		final String nsi = nsinf;
+    	
+    	if(BinaryWebSocketServer.streamingSessions.values().contains(sid) == true) {
+  		  
+  		  String destSessionId = null;
+  		  
+  		  for(String ss : BinaryWebSocketServer.streamingSessions.keySet()) {
+  			  
+  			  if(BinaryWebSocketServer.streamingSessions.get(ss).compareTo(sid) == 0) {
+  				  
+  				  destSessionId = ss;
+  				  break;
+  			  }
+  		  }
+  		  
+  		  if(destSessionId != null) {
+  		
+  			BinaryWebSocketServer.sendSessionMessage("STREAMHLS:" + ":" + nsi + ":" + loc, destSessionId);
+  			
+  			checkForBytes(nsi + ":" + loc, asyncResponse);
+  		  }
+  	  }
+    	
+	}
+    
+    private void checkForBytes(String hlsId, AsyncResponse asyncResponse) {
+    	
 		scheduler.schedule(new Runnable() {
 			@Override
 			public void run() {
-				asyncResponse.resume(Response.ok(new byte[0], MediaType.APPLICATION_OCTET_STREAM).build());
+				
+				if(BinaryWebSocketServer.hlsFrags.containsKey(hlsId) == true) {
+					
+					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFrags.get(hlsId), MediaType.APPLICATION_OCTET_STREAM).build());
+					
+				} else {
+					checkForBytes(hlsId, asyncResponse);
+				}
 			}
-			}, 5, TimeUnit.SECONDS);
-		}
+			}, 1, TimeUnit.SECONDS);
+    	
+    }
 }
