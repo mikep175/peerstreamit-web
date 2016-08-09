@@ -31,13 +31,13 @@ public class HLSStreaming {
 
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + hlsId);
 		  
-		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
-				"#EXT-X-TARGETDURATION:4\r\n" +
-				"#EXT-X-VERSION:7\r\n" +
-				"#EXT-X-MEDIA-SEQUENCE:1\r\n" +
-				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
-				"#EXT-X-INDEPENDENT-SEGMENTS\r\n" +
-				"#EXT-X-MAP:URI=\"https://app.peerstreamit.com/HLS/streaming/init.mp4?sid=" + hlsId + "\"\r\n");
+		StringBuilder ret = new StringBuilder("#EXTM3U" +
+				"#EXT-X-TARGETDURATION:4" +
+				"#EXT-X-VERSION:7" +
+				"#EXT-X-MEDIA-SEQUENCE:1" +
+				"#EXT-X-PLAYLIST-TYPE:VOD" +
+				"#EXT-X-INDEPENDENT-SEGMENTS" +
+				"#EXT-X-MAP:URI=\"https://app.peerstreamit.com/HLS/streaming/init.mp4?sid=" + hlsId + "\"");
 		
 		 DecimalFormat decimalFormat=new DecimalFormat("#");
 		 
@@ -53,7 +53,7 @@ public class HLSStreaming {
 				
 				while (length > 4) {
 					
-					ret.append("\r\n#EXTINF:4.0\r\n");
+					ret.append("#EXTINF:4.0");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.m4s?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
 					length -= 4;
@@ -61,7 +61,7 @@ public class HLSStreaming {
 				}
 
 				if(length > 0) {
-					ret.append("\r\n#EXTINF:"+decimalFormat.format(length)+".0,\r\n");
+					ret.append("#EXTINF:"+decimalFormat.format(length)+".0,");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.m4s?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 				}
 			}
@@ -69,7 +69,7 @@ public class HLSStreaming {
 			
 		}
 		
-    	ret.append("\r\n#EXT-X-ENDLIST");
+    	ret.append("#EXT-X-ENDLIST");
     	
     	//return ret.toString();
     	
