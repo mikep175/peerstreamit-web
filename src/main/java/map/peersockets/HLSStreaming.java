@@ -36,7 +36,7 @@ public class HLSStreaming {
 				"#EXT-X-INDEPENDENT-SEGMENTS\n" +
 				"#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English stereo\",LANGUAGE=\"en\",AUTOSELECT=YES,URI=\"playlist.m3u8" + hlsId + "\"\n" +
 				"#EXT-X-STREAM-INF:BANDWIDTH=628000,CODECS=\"avc1.4dc00d,mp4a.40.2\",RESOLUTION=320x180,AUDIO=\"audio\"\n" +
-				"playlist.m3u8" + hlsId);
+				"playlist.m3u8?sid=" + hlsId);
 		
     	return Response.ok(ret.toString(), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").build();
     }
