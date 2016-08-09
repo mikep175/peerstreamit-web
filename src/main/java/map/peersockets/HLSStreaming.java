@@ -122,7 +122,7 @@ public class HLSStreaming {
 				if(BinaryWebSocketServer.hlsFragsFinal.containsKey(hlsId) == true) {
 					
 					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.remove(hlsId), "video/mp4").build());
-					
+					 
 				} else {
 					checkForBytes(hlsId, asyncResponse);
 				}
