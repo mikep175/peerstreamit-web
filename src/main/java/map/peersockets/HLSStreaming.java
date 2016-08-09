@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
 @Path("streaming")
 public class HLSStreaming {
 
-	@Produces({ "application/x-mpegURL" })
+	@Produces({ "audio/x-mpegurl" })
     @GET
     @Path("playlist.m3u8")
     public String playlist(@QueryParam("sid") String hlsId) {
