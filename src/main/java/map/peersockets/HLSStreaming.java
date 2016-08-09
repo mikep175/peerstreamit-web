@@ -26,18 +26,35 @@ public class HLSStreaming {
 
 	@Produces({ "audio/x-mpegurl" })
     @GET
+    @Path("master.m3u8")
+    public Response master(@QueryParam("sid") String hlsId) {
+
+		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "master.m3u8 : " + hlsId);
+		  
+		StringBuilder ret = new StringBuilder("#EXTM3U\n" +
+				"#EXT-X-VERSION:6\n" +
+				"#EXT-X-INDEPENDENT-SEGMENTS\n" +
+				"#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English stereo\",LANGUAGE=\"en\",AUTOSELECT=YES,URI=\"playlist.m3u8" + hlsId + "\"\n" +
+				"#EXT-X-STREAM-INF:BANDWIDTH=628000,CODECS=\"avc1.4dc00d,mp4a.40.2\",RESOLUTION=320x180,AUDIO=\"audio\"\n" +
+				"playlist.m3u8" + hlsId);
+		
+    	return Response.ok(ret.toString(), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").build();
+    }
+	
+	@Produces({ "audio/x-mpegurl" })
+    @GET
     @Path("playlist.m3u8")
     public Response playlist(@QueryParam("sid") String hlsId) {
 
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + hlsId);
 		  
-		StringBuilder ret = new StringBuilder("#EXTM3U" +
-				"#EXT-X-TARGETDURATION:4" +
-				"#EXT-X-VERSION:7" +
-				"#EXT-X-MEDIA-SEQUENCE:1" +
-				"#EXT-X-PLAYLIST-TYPE:VOD" +
-				"#EXT-X-INDEPENDENT-SEGMENTS" +
-				"#EXT-X-MAP:URI=\"https://app.peerstreamit.com/HLS/streaming/init.mp4?sid=" + hlsId + "\"");
+		StringBuilder ret = new StringBuilder("#EXTM3U\n" +
+				"#EXT-X-TARGETDURATION:4\n" +
+				"#EXT-X-VERSION:7\n" +
+				"#EXT-X-MEDIA-SEQUENCE:1\n" +
+				"#EXT-X-PLAYLIST-TYPE:VOD\n" +
+				"#EXT-X-INDEPENDENT-SEGMENTS\n" +
+				"#EXT-X-MAP:URI=\"https://app.peerstreamit.com/HLS/streaming/init.mp4?sid=" + hlsId + "\"\n");
 		
 		 DecimalFormat decimalFormat=new DecimalFormat("#");
 		 
@@ -53,7 +70,7 @@ public class HLSStreaming {
 				
 				while (length > 4) {
 					
-					ret.append("#EXTINF:4.0");
+					ret.append("\n#EXTINF:4.0\n");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.m4s?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
 					length -= 4;
@@ -61,7 +78,7 @@ public class HLSStreaming {
 				}
 
 				if(length > 0) {
-					ret.append("#EXTINF:"+decimalFormat.format(length)+".0,");
+					ret.append("\n#EXTINF:"+decimalFormat.format(length)+".0\n");
 					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.m4s?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 				}
 			}
