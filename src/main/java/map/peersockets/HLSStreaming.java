@@ -102,13 +102,13 @@ public class HLSStreaming {
 			final String nsi = nsinf;
 			
 
-			Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "chunk.m4s : " + sid + " : " + nsi);
+			Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "init.mp4 : " + sid + " : " + nsi);
 	    	
 	    	if(BinaryWebSocketServer.streamingSessions.containsKey(sid) == true) {
 
 	  			BinaryWebSocketServer.sendSessionMessage("INITHLS:" + nsi, BinaryWebSocketServer.streamingSessions.get(sid));
 	  			
-	  			checkForBytes(nsi, asyncResponse);
+	  			checkForBytes(nsi + ":-1", asyncResponse);
 	  			
 	  	  } else {
 	  		asyncResponse.cancel();
