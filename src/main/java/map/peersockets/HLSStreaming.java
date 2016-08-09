@@ -73,7 +73,7 @@ public class HLSStreaming {
     	
     	//return ret.toString();
     	
-    	return Response.ok(ret.toString(), "audio/x-mpegurl").build();
+    	return Response.ok(ret.toString(), "audio/x-mpegurl").header("Accept-Ranges", "bytes").build();
     }
 
     @GET 
