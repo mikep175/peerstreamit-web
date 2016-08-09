@@ -34,7 +34,7 @@ public class HLSStreaming {
 		StringBuilder ret = new StringBuilder("#EXTM3U\n" +
 				"#EXT-X-VERSION:6\n" +
 				"#EXT-X-INDEPENDENT-SEGMENTS\n" +
-				"#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English stereo\",LANGUAGE=\"en\",AUTOSELECT=YES,URI=\"playlist.m3u8" + hlsId + "\"\n" +
+				"#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English stereo\",LANGUAGE=\"en\",AUTOSELECT=YES,URI=\"playlist.m3u8?sid=" + hlsId + "\"\n" +
 				"#EXT-X-STREAM-INF:BANDWIDTH=628000,CODECS=\"avc1.4dc00d,mp4a.40.2\",RESOLUTION=320x180,AUDIO=\"audio\"\n" +
 				"playlist.m3u8?sid=" + hlsId);
 		
