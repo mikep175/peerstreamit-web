@@ -27,7 +27,7 @@ public class HLSStreaming {
 	@Produces({ "audio/x-mpegurl" })
     @GET
     @Path("playlist.m3u8")
-    public String playlist(@QueryParam("sid") String hlsId) {
+    public Response playlist(@QueryParam("sid") String hlsId) {
 
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + hlsId);
 		  
@@ -71,7 +71,9 @@ public class HLSStreaming {
 		
     	ret.append("\r\n#EXT-X-ENDLIST");
     	
-    	return ret.toString();
+    	//return ret.toString();
+    	
+    	return Response.ok(ret.toString(), "audio/x-mpegurl").build();
     }
 
     @GET 
