@@ -32,11 +32,12 @@ public class HLSStreaming {
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + hlsId);
 		  
 		StringBuilder ret = new StringBuilder("#EXTM3U\r\n" +
-				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
 				"#EXT-X-TARGETDURATION:4\r\n" +
-				"#EXT-X-VERSION:3\r\n" +
-				"#EXT-X-MEDIA-SEQUENCE:0" +// + //\r\n
-				"#EXT-X-MAP:URI=\"chunk.mp4\"\r\n");
+				"#EXT-X-VERSION:7\r\n" +
+				"#EXT-X-MEDIA-SEQUENCE:1\r\n" +
+				"#EXT-X-PLAYLIST-TYPE:VOD\r\n" +
+				"#EXT-X-INDEPENDENT-SEGMENTS\r\n" +
+				"#EXT-X-MAP:URI=\"https://app.peerstreamit.com/HLS/streaming/init.mp4?sid=" + hlsId + "\"\r\n");
 		
 		 DecimalFormat decimalFormat=new DecimalFormat("#");
 		 
@@ -52,8 +53,8 @@ public class HLSStreaming {
 				
 				while (length > 4) {
 					
-					ret.append("\r\n#EXTINF:4.0,\r\n");
-					ret.append("chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
+					ret.append("\r\n#EXTINF:4.0\r\n");
+					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.m4s?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 					
 					length -= 4;
 					loc += 4;
@@ -61,7 +62,7 @@ public class HLSStreaming {
 
 				if(length > 0) {
 					ret.append("\r\n#EXTINF:"+decimalFormat.format(length)+".0,\r\n");
-					ret.append("chunk.mp4?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
+					ret.append("https://app.peerstreamit.com/HLS/streaming/chunk.m4s?sid=" + hlsId + "&loc=" + decimalFormat.format(loc));
 				}
 			}
 			
@@ -72,9 +73,52 @@ public class HLSStreaming {
     	
     	return ret.toString();
     }
+
+    @GET 
+    @Path("init.mp4")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+	 public void getInit(@QueryParam("sid") String hlsId, @Context HttpServletRequest requestContext,
+	            @Context HttpServletResponse response,
+	            @Suspended AsyncResponse asyncResponse) {
+	    	
+
+			String sid = BinaryWebSocketServer.streamingSessions.get(hlsId);
+			
+	    	String nsinf = null;
+	    	
+	    	for(String nsi : BinaryWebSocketServer.streamingRequests.keySet()) {
+				
+				if(BinaryWebSocketServer.streamingRequests.get(nsi) != null && BinaryWebSocketServer.streamingRequests.get(nsi).compareTo(sid) == 0) {
+					
+					nsinf = nsi;
+					break;
+					
+				}
+				
+			}
+			
+			final String nsi = nsinf;
+			
+
+			Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "chunk.m4s : " + sid + " : " + nsi);
+	    	
+	    	if(BinaryWebSocketServer.streamingSessions.containsKey(sid) == true) {
+
+	  			BinaryWebSocketServer.sendSessionMessage("INITHLS:" + nsi, BinaryWebSocketServer.streamingSessions.get(sid));
+	  			
+	  			checkForBytes(nsi, asyncResponse);
+	  			
+	  	  } else {
+	  		asyncResponse.cancel();
+	  	  }
+	    	
+		}
+	    
+	
+	
 	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
     @GET 
-    @Path("chunk.mp4")
+    @Path("chunk.m4s")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public void getFile(@QueryParam("sid") String hlsId, @QueryParam("loc") String loc, @Context HttpServletRequest requestContext,
             @Context HttpServletResponse response,
@@ -99,7 +143,7 @@ public class HLSStreaming {
 		final String nsi = nsinf;
 		
 
-		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "chunk.mp4 : " + sid + " : " + nsi);
+		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "chunk.m4s : " + sid + " : " + nsi);
     	
     	if(BinaryWebSocketServer.streamingSessions.containsKey(sid) == true) {
 
@@ -121,7 +165,7 @@ public class HLSStreaming {
 				
 				if(BinaryWebSocketServer.hlsFragsFinal.containsKey(hlsId) == true) {
 					
-					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.remove(hlsId), "video/mp4").build());
+					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.remove(hlsId), "text/plain").build());
 					 
 				} else {
 					checkForBytes(hlsId, asyncResponse);
