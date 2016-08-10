@@ -1,6 +1,7 @@
 package map.peersockets;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,7 +39,7 @@ public class HLSStreaming {
 				"#EXT-X-STREAM-INF:BANDWIDTH=628000,CODECS=\"avc1.4dc00d,mp4a.40.2\",RESOLUTION=320x180,AUDIO=\"audio\"\n" +
 				"playlist.m3u8?sid=" + hlsId);
 		
-    	return Response.ok(ret.toString(), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").build();
+    	return Response.ok(ret.toString().getBytes(), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").build();
     }
 	
 	@Produces({ "audio/x-mpegurl" })
@@ -90,7 +91,7 @@ public class HLSStreaming {
     	
     	//return ret.toString();
     	
-    	return Response.ok(ret.toString(), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").build();
+    	return Response.ok(ret.toString().getBytes(), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").build();
     }
 
     @GET 
