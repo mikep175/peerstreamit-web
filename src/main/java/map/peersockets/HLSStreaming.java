@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
 @Path("streaming")
 public class HLSStreaming {
 
-	@Produces({ "text/plain" })
+	@Produces({ "audio/x-mpegurl" })
     @GET
     @Path("master.m3u")
     public Response master(@QueryParam("sid") String hlsId) {
@@ -41,10 +41,10 @@ public class HLSStreaming {
 
 		byte[] retBytes = ret.toString().getBytes(Charset.forName("UTF-8"));
 		
-    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).header("Content-Range",  "").build();
+    	return Response.ok(retBytes, "audio/x-mpegurl").status(200).header("Content-Length", retBytes.length).header("Content-Range",  "").build();
     }
 	
-	@Produces({ "text/plain" })
+	@Produces({ "audio/x-mpegurl" })
     @GET
     @Path("playlist.m3u")
     public Response playlist(@QueryParam("sid") String hlsId) {
@@ -93,7 +93,7 @@ public class HLSStreaming {
 
 		byte[] retBytes = ret.toString().getBytes(Charset.forName("UTF-8"));
 		
-    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).header("Content-Range",  "").build();
+    	return Response.ok(retBytes, "audio/x-mpegurl").status(200).header("Content-Length", retBytes.length).header("Content-Range",  "").build();
     }
 
     @GET 
@@ -187,7 +187,7 @@ public class HLSStreaming {
 				
 				if(BinaryWebSocketServer.hlsFragsFinal.containsKey(hlsId) == true) {
 					
-					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.remove(hlsId), "text/plain").build());
+					asyncResponse.resume(Response.ok(BinaryWebSocketServer.hlsFragsFinal.remove(hlsId), MediaType.APPLICATION_OCTET_STREAM).build());
 					 
 				} else {
 					checkForBytes(hlsId, asyncResponse);
