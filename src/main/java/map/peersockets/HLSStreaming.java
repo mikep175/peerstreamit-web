@@ -38,8 +38,8 @@ public class HLSStreaming {
 				"#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English stereo\",LANGUAGE=\"en\",AUTOSELECT=YES,URI=\"playlist.m3u8?sid=" + hlsId + "\"\n" +
 				"#EXT-X-STREAM-INF:BANDWIDTH=628000,CODECS=\"avc1.4dc00d,mp4a.40.2\",RESOLUTION=320x180,AUDIO=\"audio\"\n" +
 				"playlist.m3u8?sid=" + hlsId);
-		
-    	return Response.ok(ret.toString().getBytes(), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").build();
+
+    	return Response.ok(ret.toString().getBytes(Charset.forName("UTF-8")), "audio/x-mpegurl").status(200).header("Accept-Ranges", "bytes").header("access-control-allow-origin", "*").build();
     }
 	
 	@Produces({ "audio/x-mpegurl" })
