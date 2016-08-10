@@ -351,9 +351,9 @@ function sourceOpen() {
 
 							$("#loading").hide();
 							$("video").show();
-							//addSourceToVideo(video, 'https://app.peerstreamit.com/HLS/streaming/master.m3u8?sid=' + hlsKey, 'application/x-mpegURL');
-							video.src = 'https://app.peerstreamit.com/HLS/streaming/master.m3u8?sid=' + hlsKey;
-							video.load();
+							addSourceToVideo(video, 'https://app.peerstreamit.com/HLS/streaming/master.m3u8?sid=' + hlsKey, 'application/x-mpegURL');
+							//video.src = 'https://app.peerstreamit.com/HLS/streaming/master.m3u8?sid=' + hlsKey;
+							//video.load();
 				            video.play();
 						}
 						else if(evt.data.indexOf('TC:') == 0) {
@@ -436,8 +436,8 @@ function sourceOpen() {
 			    function addSourceToVideo(element, src, type) {
 			        var source = document.createElement('source');
 
-			        source.src = src;
-			        source.type = type;
+			        source.setAttribute('src', src);
+			        source.setAttribute('type', type);
 
 			        element.appendChild(source);
 			    }
