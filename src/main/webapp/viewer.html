@@ -358,7 +358,7 @@ function sourceOpen() {
 								      console.log('err');
 								   },
 								   success: function(data) {
-										addSourceToVideo(video, 'data:text/plain;' + data, 'application/x-mpegURL');
+										addSourceToVideo(video, 'data:text/plain;base64,' + btoa(data), 'application/x-mpegURL');
 							            video.play();
 								   },
 								   type: 'GET'
