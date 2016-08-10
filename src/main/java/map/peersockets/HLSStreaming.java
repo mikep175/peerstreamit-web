@@ -27,7 +27,7 @@ public class HLSStreaming {
 
 	@Produces({ "text/plain" })
     @GET
-    @Path("master.m3u8")
+    @Path("master.m3u")
     public Response master(@QueryParam("sid") String hlsId) {
 
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "master.m3u8 : " + hlsId);
@@ -35,18 +35,18 @@ public class HLSStreaming {
 		StringBuilder ret = new StringBuilder("#EXTM3U\n" +
 				"#EXT-X-VERSION:6\n" +
 				"#EXT-X-INDEPENDENT-SEGMENTS\n" +
-				"#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English stereo\",LANGUAGE=\"en\",AUTOSELECT=YES,URI=\"playlist.m3u8?sid=" + hlsId + "\"\n" +
+				"#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English stereo\",LANGUAGE=\"en\",AUTOSELECT=YES,URI=\"playlist.m3u?sid=" + hlsId + "\"\n" +
 				"#EXT-X-STREAM-INF:BANDWIDTH=628000,CODECS=\"avc1.4dc00d,mp4a.40.2\",RESOLUTION=320x180,AUDIO=\"audio\"\n" +
-				"playlist.m3u8?sid=" + hlsId);
+				"playlist.m3u?sid=" + hlsId);
 
 		byte[] retBytes = ret.toString().getBytes(Charset.forName("UTF-8"));
 		
-    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).build();
+    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).header("Content-Range",  "").build();
     }
 	
 	@Produces({ "text/plain" })
     @GET
-    @Path("playlist.m3u8")
+    @Path("playlist.m3u")
     public Response playlist(@QueryParam("sid") String hlsId) {
 
 		Logger.getLogger(BinaryWebSocketServer.class.getName()).log(Level.INFO, "playlist.m3u8 : " + hlsId);
@@ -93,7 +93,7 @@ public class HLSStreaming {
 
 		byte[] retBytes = ret.toString().getBytes(Charset.forName("UTF-8"));
 		
-    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).build();
+    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).header("Content-Range",  "").build();
     }
 
     @GET 
