@@ -39,7 +39,9 @@ public class HLSStreaming {
 				"#EXT-X-STREAM-INF:BANDWIDTH=628000,CODECS=\"avc1.4dc00d,mp4a.40.2\",RESOLUTION=320x180,AUDIO=\"audio\"\n" +
 				"playlist.m3u8?sid=" + hlsId);
 
-    	return Response.ok(ret.toString().getBytes(Charset.forName("UTF-8")), "text/plain").status(200).header("Accept-Ranges", "bytes").build();
+		byte[] retBytes = ret.toString().getBytes(Charset.forName("UTF-8"));
+		
+    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).build();
     }
 	
 	@Produces({ "text/plain" })
@@ -88,10 +90,10 @@ public class HLSStreaming {
 		}
 		
     	ret.append("#EXT-X-ENDLIST");
-    	
-    	//return ret.toString();
-    	
-    	return Response.ok(ret.toString().getBytes(), "text/plain").status(200).header("Accept-Ranges", "bytes").build();
+
+		byte[] retBytes = ret.toString().getBytes(Charset.forName("UTF-8"));
+		
+    	return Response.ok(retBytes, "text/plain").status(200).header("Content-Length", retBytes.length).build();
     }
 
     @GET 
