@@ -94,6 +94,51 @@ public class BlastWebSocketServer {
 		  Logger.getLogger(BlastWebSocketServer.class.getName()).log(Level.INFO, "LOC: " + senderSession.getId() + " - " + message);
 		  return;
 	  }
+
+	  //notify ps of psikey
+	  if(message.indexOf("PSIREMKEY:") == 0) {
+		  
+		  String[] raw = message.split(":");
+
+		  if(listeningKeys.containsKey(senderSession.getId()) == false) {
+			  ArrayList<String> keys = new ArrayList<String>();
+			  keys.add("-99999999999999");
+			  keys.add("-99999999999999");
+			  keys.add("-99999999999999");
+			  listeningKeys.put(senderSession.getId(), keys);
+		  }
+		  
+		  if(listeningKeys.get(senderSession.getId()).contains(raw[1]) == true){
+			  
+			  listeningKeys.get(senderSession.getId()).remove(raw[1]);
+			  
+		  }
+		  
+		  Logger.getLogger(BlastWebSocketServer.class.getName()).log(Level.INFO, "LOC: " + senderSession.getId() + " - " + message);
+		  return;
+	  }
+	  //notify ps of psikey
+	  if(message.indexOf("PSIKEY:") == 0) {
+		  
+		  String[] raw = message.split(":");
+
+		  if(listeningKeys.containsKey(senderSession.getId()) == false) {
+			  ArrayList<String> keys = new ArrayList<String>();
+			  keys.add("-99999999999999");
+			  keys.add("-99999999999999");
+			  keys.add("-99999999999999");
+			  listeningKeys.put(senderSession.getId(), keys);
+		  }
+		  
+		  if(listeningKeys.get(senderSession.getId()).contains(raw[1]) == false){
+			  
+			  listeningKeys.get(senderSession.getId()).add(raw[1]);
+			  
+		  }
+		  
+		  Logger.getLogger(BlastWebSocketServer.class.getName()).log(Level.INFO, "LOC: " + senderSession.getId() + " - " + message);
+		  return;
+	  }
 	  //notify ps of psikey
 	  if(message.indexOf("PSIBLAST:") == 0) {
 		  
@@ -106,9 +151,14 @@ public class BlastWebSocketServer {
 			  
 			  double radSender = Double.parseDouble(raw[1]);
 
+			  String blastKey = null;
+			  if(raw.length > 4) {
+				  blastKey = raw[4];
+			  }
+			  
 			  for(String key : listeningKeys.keySet()) {
 				  
-				  if(key != senderSession.getId()) {
+				  if(key != senderSession.getId() && (blastKey == null || listeningKeys.get(key).contains(blastKey))) {
 
 					  double lat = Double.parseDouble(listeningKeys.get(key).get(0));
 					  double lon = Double.parseDouble(listeningKeys.get(key).get(1));
@@ -117,7 +167,7 @@ public class BlastWebSocketServer {
 					  double distance = distance(lat, lon, latSender, lonSender, "M");
 					  
 					  if(radSender > distance && rad > distance) {
-						  sendSessionMessage(raw[2] + ":" + raw[3], key);
+						  sendSessionMessage(raw[2] + ":" + raw[3] + (blastKey != null ? (":" + blastKey) : ""), key);
 					  }
 				  }
 			  }
