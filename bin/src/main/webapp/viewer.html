@@ -1,0 +1,244 @@
+<html class="k-webkit k-webkit47"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+        <title>PeerStreamIt</title>
+        <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+        <meta content="PeerStreamIt." name="description">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <link rel="shortcut icon" href="favicon.ico">
+
+        <link rel="stylesheet" href="/css/aeroviewr.css">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+
+			<link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.common-material.min.css" rel="stylesheet"><link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.rtl.min.css" rel="stylesheet"><link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.material.min.css" rel="stylesheet"><link href="//kendo.cdn.telerik.com/2015.3.1111/styles/kendo.material.mobile.min.css" rel="stylesheet">
+           <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+            <script src="//kendo.cdn.telerik.com/2015.3.1111/js/jszip.min.js"></script>
+            <script src="//kendo.cdn.telerik.com/2015.3.1111/js/kendo.all.min.js"></script>
+            <script src="//kendo.cdn.telerik.com/2015.3.1111/js/kendo.timezones.min.js"></script>
+    <style type="text/css" id="ki-fve-fw"></style><style type="text/css" id="ki-fve-ft"></style></head>
+    <body>
+        <div id="root"><div><header>
+                <h1 class="aeroLogo"><a href="">peer<span>stream</span>it</a></h1>&nbsp;
+                <!--button id="slideshow-button" data-bind="text: slideShowButtonText, click: toggleSlideShow"></button-->
+            </header>
+
+            <section data-bind="events: { click: toggleFocus }" id="image-container">
+                <div id="image-wrap">
+                    <div id="image-inner-wrap" data-bind="events: { click: toggleShowDetails }">
+                        <section data-bind="attr: { class: detailsClass }" id="details" class="visible">
+                            <div>
+                                <h2 id="stream-status" data-bind="text: currentPhoto.name, visible: currentPhoto.name">Initializing viewer</h2>
+                                <ul>
+                                	<li ><span>Buffered:</span><div id="stream-buff" ></div></li>
+                                	<li ><span>Elapsed:</span><div id="stream-elap" ></div></li>
+                                    <li ><span>Video Duration:</span><div id="stream-vd" ></div></li>
+                                    <li ><span>Playable Duration:</span><div id="stream-pd" ></div></li>
+                               </ul>
+                            </div>
+                        </section>
+                        <div class="loading" data-bind="style: { width: currentPhoto.calculatedWidth }" style="width: 793.188px;">
+                            <video controls width="100%" height="100%" ></video>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <span style="display: inline-block; width: 100%; text-align: center; color: white;" >Copyright © 2016 · Real Time Productions, LLC. All Rights Reserved</span>
+            </footer></div></div>
+<script>
+
+
+function Logger(id) {
+  this.el = document.getElementById('log');
+}
+Logger.prototype.log = function(msg) {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(document.createTextNode(msg));
+  fragment.appendChild(document.createElement('br'));
+  this.el.appendChild(fragment);
+};
+
+Logger.prototype.clear = function() {
+  this.el.textContent = '';
+};
+
+var sourceBuffer;
+var mediaSource;
+var output;
+var websocket;
+var textID;
+
+var queue = [];
+var ready = true;
+
+function sourceOpen() {
+
+	sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42c01f, mp4a.40.2"');//'video/webm; codecs="vorbis,vp8"');
+    
+	sourceBuffer.addEventListener('updateend', function() {
+		
+	  if ( queue.length && queue.length > 0) {
+		  
+	    sourceBuffer.appendBuffer(queue.shift());
+	    ready = false;
+	    
+	  } else {
+
+		  ready = true;
+			
+	  }
+	}, false);
+	
+}
+
+var logger = new Logger('log');
+
+            var wsUri = getRootUri() + "/sockets";
+ 
+            function getRootUri() {
+                return "ws://peersockets-myappsplatform.rhcloud.com:8000";
+            }
+
+            var dataStart = null;
+            var needed = 10;
+            
+            function init() {
+
+
+            	output = document.getElementById("output");
+            	
+            	var FILE = 'test.webm';
+            	var NUM_CHUNKS = 5;
+            	var video = document.querySelector('video');
+
+            	window.MediaSource = window.MediaSource || window.WebKitMediaSource;
+            	if (!!!window.MediaSource) {
+            	  alert('MediaSource API is not available');
+            	}
+
+            	mediaSource = new MediaSource();
+
+            	mediaSource.addEventListener('sourceopen', sourceOpen);
+            	//document.querySelector('[data-num-chunks]').textContent = NUM_CHUNKS;
+
+				video.src = window.URL.createObjectURL(mediaSource);
+            	
+                textID = document.getElementById("textID");
+
+                websocket = new WebSocket(wsUri);
+
+
+                websocket.onopen = function(evt) {
+                    onOpen(evt)
+                };
+                websocket.onmessage = function(evt) {
+
+					if(evt.data.size) {
+						
+						var arrayBuffer;
+						var fileReader = new FileReader();
+						fileReader.onload = function() {
+						    arrayBuffer = this.result;
+
+							if(ready == true) {
+
+								if ( queue.length && queue.length > 0) {
+									queue.push(arrayBuffer);
+								    sourceBuffer.appendBuffer(queue.shift());
+								    ready = false;
+								    
+								}
+								else {
+						    		sourceBuffer.appendBuffer(arrayBuffer);
+									ready = false;
+								}
+							}else {
+
+								queue.push(arrayBuffer);
+
+						    }
+
+						    if (dataStart == null) {
+						    	$("#stream-status").text("Buffering");
+
+						    	dataStart = new Date();
+					            //video.play(); // Start playing after 1st chunk is appended.
+					          }
+						    
+						};
+						
+						fileReader.readAsArrayBuffer(evt.data);
+
+					}
+					else {
+
+						if(evt.data && evt.data.indexOf && evt.data.indexOf('TC:') == 0) {
+
+							var retrieved = evt.data.split(':')[1];
+							
+							$("#stream-buff").text(retrieved + "s");
+							
+							var now = new Date();
+
+							var dif = now.getTime() - dataStart.getTime();
+
+							var elapsed = dif / 1000;
+
+							$("#stream-elap").text(elapsed + "s");
+							$("#stream-vd").text(video.duration + "s");
+							$("#stream-pd").text((video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) + "s");
+							
+							if(video.duration <= (video.duration - parseInt(retrieved)) * (parseInt(retrieved) / elapsed) ) {
+								$("#stream-status").text("Playing");
+								video.play();
+
+							}
+						}
+						
+                    	onMessage(evt)
+					}
+                };
+                websocket.onerror = function(evt) {
+                    onError(evt)
+                };
+            }
+ 
+            function send_message() {
+                doSend(textID.value);
+            }
+ 
+            function onOpen(evt) {
+                writeToScreen("Connected to Endpoint!");
+ 				doSend('play');
+ 				$("#stream-status").text("Starting stream");
+            }
+ 
+            function onMessage(evt) {
+                writeToScreen("Message Received: " + evt.data);
+            }
+ 
+            function onError(evt) {
+                writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+            }
+ 
+            function doSend(message) {
+                writeToScreen("Message Sent: " + message);
+                websocket.send(message);
+            }
+ 
+            function writeToScreen(message) {
+                var pre = document.createElement("p");
+                pre.style.wordWrap = "break-word";
+                pre.innerHTML = message;
+                  
+                output.appendChild(pre);
+            }
+ 
+            window.addEventListener("load", init, false);
+ 
+        </script>
+        <div id="output" style="display:none" ></div>
+</body></html>

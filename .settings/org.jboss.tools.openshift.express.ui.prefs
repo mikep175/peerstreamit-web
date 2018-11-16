@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+org.jboss.tools.openshift.ApplicationId=56880ccd7628e149d0000012
+org.jboss.tools.openshift.ApplicationName=peersockets
+org.jboss.tools.openshift.Connection=https\://mikeycp1%40gmail.com@openshift.redhat.com
+org.jboss.tools.openshift.Domain=myappsplatform
+org.jboss.tools.openshift.RemoteName=openshift
